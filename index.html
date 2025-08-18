@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corrida 2D Top-Down</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #gameCanvas {
+            border: 3px solid #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            background: #2d5a27;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            z-index: 10;
+        }
+
+        .ui-item {
+            margin-bottom: 10px;
+            padding: 8px 15px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 20px;
+            border: 2px solid #fff;
+        }
+
+        #mobileControls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+            z-index: 10;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            margin: 5px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+            background: rgba(255,255,255,0.7);
+        }
+
+        .control-btn.up { grid-area: up; }
+        .control-btn.down { grid-area: down; }
+        .control-btn.left { grid-area: left; }
+        .control-btn.right { grid-area: right; }
+
+        #controlGrid {
+            display: grid;
+            grid-template-areas: 
+                ". up ."
+                "left . right"
+                ". down .";
+            gap: 10px;
+        }
+
+        #startScreen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 20;
+        }
+
+        #startScreen h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+        }
+
+        #startScreen p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        #startBtn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        #startBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        #startBtn:active {
+            transform: translateY(0);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            #ui {
+                font-size: 14px;
+                top: 10px;
+                left: 10px;
+            }
+
+            .ui-item {
+                padding: 6px 12px;
+                margin-bottom: 8px;
+            }
+
+            #mobileControls {
+                display: block;
+            }
+
+            #startScreen h1 {
+                font-size: 2rem;
+            }
+
+            #startScreen p {
+                font-size: 1rem;
+            }
+
+            #startBtn {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #gameCanvas {
+                border-width: 2px;
+                border-radius: 8px;
+            }
+
+            .control-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="ui">
+            <div class="ui-item">Velocidade: <span id="speed">0</span> km/h</div>
+            <div class="ui-item">Volta: <span id="lap">1</span>/3</div>
+            <div class="ui-item">Tempo: <span id="time">00:00</span></div>
+        </div>
+
+        <div id="mobileControls">
+            <div id="controlGrid">
+                <button class="control-btn up" id="upBtn">↑</button>
+                <button class="control-btn down" id="downBtn">↓</button>
+                <button class="control-btn left" id="leftBtn">←</button>
+                <button class="control-btn right" id="rightBtn">→</button>
+            </div>
+        </div>
+
+        <div id="startScreen">
+            <h1>🏁 Corrida 2D</h1>
+            <p>Use WASD ou Setas para controlar o carro</p>
+            <p>No mobile, use os botões touch</p>
+            <button id="startBtn">Iniciar Jogo</button>
+        </div>
+    </div>
+
+    <script>
+        class Game {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.startScreen = document.getElementById('startScreen');
+                this.startBtn = document.getElementById('startBtn');
+                
+                this.gameRunning = false;
+                this.gameTime = 0;
+                this.lap = 1;
+                this.maxLaps = 3;
+                
+                this.player = {
+                    x: 100,
+                    y: 100,
+                    width: 30,
+                    height: 50,
+                    speed: 0,
+                    maxSpeed: 5,
+                    acceleration: 0.2,
+                    deceleration: 0.1,
+                    rotation: 0,
+                    rotationSpeed: 0.1
+                };
+                
+                this.keys = {};
+                this.touchControls = {};
+                
+                this.init();
+            }
+            
+            init() {
+                this.resizeCanvas();
+                this.setupEventListeners();
+                this.setupTouchControls();
+                this.gameLoop();
+            }
+            
+            resizeCanvas() {
+                const container = document.getElementById('gameContainer');
+                const maxWidth = Math.min(window.innerWidth - 40, 800);
+                const maxHeight = Math.min(window.innerHeight - 100, 600);
+                
+                this.canvas.width = maxWidth;
+                this.canvas.height = maxHeight;
+                
+                // Centralizar o jogador
+                this.player.x = maxWidth / 2;
+                this.player.y = maxHeight / 2;
+            }
+            
+            setupEventListeners() {
+                // Controles de teclado
+                window.addEventListener('keydown', (e) => {
+                    this.keys[e.key.toLowerCase()] = true;
+                });
+                
+                window.addEventListener('keyup', (e) => {
+                    this.keys[e.key.toLowerCase()] = false;
+                });
+                
+                // Redimensionamento da janela
+                window.addEventListener('resize', () => {
+                    this.resizeCanvas();
+                });
+                
+                // Botão de início
+                this.startBtn.addEventListener('click', () => {
+                    this.startGame();
+                });
+            }
+            
+            setupTouchControls() {
+                const upBtn = document.getElementById('upBtn');
+                const downBtn = document.getElementById('downBtn');
+                const leftBtn = document.getElementById('leftBtn');
+                const rightBtn = document.getElementById('rightBtn');
+                
+                // Controles touch
+                upBtn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.touchControls.up = true;
+                });
+                
+                upBtn.addEventListener('touchend', () => {
+                    this.touchControls.up = false;
+                });
+                
+                downBtn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.touchControls.down = true;
+                });
+                
+                downBtn.addEventListener('touchend', () => {
+                    this.touchControls.down = false;
+                });
+                
+                leftBtn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.touchControls.left = true;
+                });
+                
+                leftBtn.addEventListener('touchend', () => {
+                    this.touchControls.left = false;
+                });
+                
+                rightBtn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.touchControls.right = true;
+                });
+                
+                rightBtn.addEventListener('touchend', () => {
+                    this.touchControls.right = false;
+                });
+            }
+            
+            startGame() {
+                this.gameRunning = true;
+                this.startScreen.classList.add('hidden');
+                this.gameTime = 0;
+                this.lap = 1;
+                this.updateUI();
+            }
+            
+            updatePlayer() {
+                // Controles de movimento
+                let moving = false;
+                
+                if (this.keys['w'] || this.keys['arrowup'] || this.touchControls.up) {
+                    this.player.speed = Math.min(this.player.speed + this.player.acceleration, this.player.maxSpeed);
+                    moving = true;
+                }
+                
+                if (this.keys['s'] || this.keys['arrowdown'] || this.touchControls.down) {
+                    this.player.speed = Math.max(this.player.speed - this.player.acceleration, -this.player.maxSpeed / 2);
+                    moving = true;
+                }
+                
+                if (this.keys['a'] || this.keys['arrowleft'] || this.touchControls.left) {
+                    this.player.rotation -= this.player.rotationSpeed;
+                }
+                
+                if (this.keys['d'] || this.keys['arrowright'] || this.touchControls.right) {
+                    this.player.rotation += this.player.rotationSpeed;
+                }
+                
+                // Desaceleração natural
+                if (!moving) {
+                    if (this.player.speed > 0) {
+                        this.player.speed = Math.max(0, this.player.speed - this.player.deceleration);
+                    } else if (this.player.speed < 0) {
+                        this.player.speed = Math.min(0, this.player.speed + this.player.deceleration);
+                    }
+                }
+                
+                // Atualizar posição baseada na velocidade e rotação
+                const radians = this.player.rotation;
+                this.player.x += Math.sin(radians) * this.player.speed;
+                this.player.y -= Math.cos(radians) * this.player.speed;
+                
+                // Manter o jogador dentro dos limites do canvas
+                this.player.x = Math.max(this.player.width/2, Math.min(this.canvas.width - this.player.width/2, this.player.x));
+                this.player.y = Math.max(this.player.height/2, Math.min(this.canvas.height - this.player.height/2, this.player.y));
+            }
+            
+            updateGame() {
+                if (this.gameRunning) {
+                    this.gameTime += 1/60; // 60 FPS
+                    this.updatePlayer();
+                    this.updateUI();
+                }
+            }
+            
+            updateUI() {
+                // Atualizar velocidade
+                const speedKmh = Math.round(Math.abs(this.player.speed) * 20);
+                document.getElementById('speed').textContent = speedKmh;
+                
+                // Atualizar tempo
+                const minutes = Math.floor(this.gameTime / 60);
+                const seconds = Math.floor(this.gameTime % 60);
+                const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                document.getElementById('time').textContent = timeString;
+                
+                // Atualizar volta
+                document.getElementById('lap').textContent = this.lap;
+            }
+            
+            render() {
+                // Limpar canvas
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Desenhar pista (grid simples)
+                this.drawTrack();
+                
+                // Desenhar jogador
+                this.drawPlayer();
+                
+                // Desenhar elementos da pista
+                this.drawTrackElements();
+            }
+            
+            drawTrack() {
+                // Grid da pista
+                this.ctx.strokeStyle = '#fff';
+                this.ctx.lineWidth = 1;
+                this.ctx.globalAlpha = 0.3;
+                
+                const gridSize = 50;
+                for (let x = 0; x < this.canvas.width; x += gridSize) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x, 0);
+                    this.ctx.lineTo(x, this.canvas.height);
+                    this.ctx.stroke();
+                }
+                
+                for (let y = 0; y < this.canvas.height; y += gridSize) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(0, y);
+                    this.ctx.lineTo(this.canvas.width, y);
+                    this.ctx.stroke();
+                }
+                
+                this.ctx.globalAlpha = 1;
+            }
+            
+            drawPlayer() {
+                this.ctx.save();
+                this.ctx.translate(this.player.x, this.player.y);
+                this.ctx.rotate(this.player.rotation);
+                
+                // Corpo do carro
+                this.ctx.fillStyle = '#ff4444';
+                this.ctx.fillRect(-this.player.width/2, -this.player.height/2, this.player.width, this.player.height);
+                
+                // Detalhes do carro
+                this.ctx.fillStyle = '#333';
+                this.ctx.fillRect(-this.player.width/2 + 2, -this.player.height/2 + 5, this.player.width - 4, 10);
+                this.ctx.fillRect(-this.player.width/2 + 2, this.player.height/2 - 15, this.player.width - 4, 10);
+                
+                // Faróis
+                this.ctx.fillStyle = '#ffff00';
+                this.ctx.fillRect(-this.player.width/2 + 3, -this.player.height/2 + 2, 4, 4);
+                this.ctx.fillRect(this.player.width/2 - 7, -this.player.height/2 + 2, 4, 4);
+                
+                this.ctx.restore();
+            }
+            
+            drawTrackElements() {
+                // Linha de chegada
+                this.ctx.fillStyle = '#fff';
+                this.ctx.fillRect(0, 50, 100, 10);
+                
+                // Checkpoints
+                this.ctx.fillStyle = '#00ff00';
+                this.ctx.fillRect(this.canvas.width - 100, 100, 10, 100);
+                this.ctx.fillRect(200, this.canvas.height - 100, 100, 10);
+            }
+            
+            gameLoop() {
+                this.updateGame();
+                this.render();
+                requestAnimationFrame(() => this.gameLoop());
+            }
+        }
+        
+        // Inicializar o jogo quando a página carregar
+        window.addEventListener('load', () => {
+            new Game();
+        });
+    </script>
+</body>
+</html>
