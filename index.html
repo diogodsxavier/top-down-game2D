@@ -198,6 +198,7 @@
             <div class="ui-item">Velocidade: <span id="speed">0</span> km/h</div>
             <div class="ui-item">Volta: <span id="lap">1</span>/3</div>
             <div class="ui-item">Tempo: <span id="time">00:00</span></div>
+            <div class="ui-item">Checkpoint: <span id="checkpoint">1</span>/4</div>
         </div>
 
         <div id="mobileControls">
@@ -212,12 +213,391 @@
         <div id="startScreen">
             <h1>🏁 Corrida 2D</h1>
             <p>Use WASD ou Setas para controlar o carro</p>
+            <p>Física realista com drift e inércia!</p>
+            <p>Pista oval com sistema de checkpoints</p>
             <p>No mobile, use os botões touch</p>
             <button id="startBtn">Iniciar Jogo</button>
         </div>
     </div>
 
     <script>
+        class Car {
+            constructor(x, y) {
+                // Propriedades físicas
+                this.x = x;
+                this.y = y;
+                this.angle = 0;
+                this.velocity = { x: 0, y: 0 };
+                this.speed = 0;
+                this.acceleration = 0;
+                
+                // Propriedades do carro
+                this.width = 30;
+                this.height = 50;
+                this.mass = 1000;
+                
+                // Constantes físicas
+                this.maxSpeed = 8;
+                this.maxAcceleration = 0.4;
+                this.maxDeceleration = 0.6;
+                this.friction = 0.98;
+                this.airResistance = 0.995;
+                this.turnSpeed = 0.08;
+                this.driftFactor = 0.3;
+                
+                // Estados
+                this.isDrifting = false;
+                this.driftAngle = 0;
+                this.lastTurnDirection = 0;
+            }
+            
+            update(input, deltaTime) {
+                // Processar entrada
+                this.processInput(input);
+                
+                // Aplicar física
+                this.applyPhysics(deltaTime);
+                
+                // Atualizar posição
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                
+                // Aplicar atrito
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                
+                // Aplicar resistência do ar
+                this.speed *= this.airResistance;
+                
+                // Calcular velocidade total
+                this.speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
+                
+                // Limitar velocidade máxima
+                if (this.speed > this.maxSpeed) {
+                    const ratio = this.maxSpeed / this.speed;
+                    this.velocity.x *= ratio;
+                    this.velocity.y *= ratio;
+                    this.speed = this.maxSpeed;
+                }
+                
+                // Proteção contra estados inconsistentes
+                if (isNaN(this.x) || isNaN(this.y) || isNaN(this.velocity.x) || isNaN(this.velocity.y)) {
+                    console.warn('Estado inconsistente detectado, resetando carro...');
+                    this.x = 400;
+                    this.y = 300;
+                    this.velocity.x = 0;
+                    this.velocity.y = 0;
+                    this.speed = 0;
+                    this.acceleration = 0;
+                    this.isDrifting = false;
+                }
+            }
+            
+            applyPhysics(deltaTime) {
+                // Normalizar delta time para física consistente
+                const normalizedDelta = Math.min(deltaTime, 2.0);
+                
+                // Aplicar aceleração com delta time
+                this.velocity.x += Math.sin(this.angle) * this.acceleration * normalizedDelta;
+                this.velocity.y -= Math.cos(this.angle) * this.acceleration * normalizedDelta;
+                
+                // Aplicar inércia nas curvas (reduzida para evitar tremulação)
+                if (Math.abs(this.velocity.x) > 0.1 || Math.abs(this.velocity.y) > 0.1) {
+                    const currentAngle = Math.atan2(this.velocity.y, this.velocity.x);
+                    const angleDiff = this.angle - currentAngle;
+                    
+                    // Aplicar correção de inércia mais suave
+                    if (Math.abs(angleDiff) > 0.1) {
+                        const correction = angleDiff * 0.05 * normalizedDelta; // Reduzido de 0.1 para 0.05
+                        this.velocity.x += Math.cos(currentAngle) * correction;
+                        this.velocity.y += Math.sin(currentAngle) * correction;
+                    }
+                }
+                
+                // Estabilizar velocidades muito baixas para evitar tremulação
+                if (Math.abs(this.velocity.x) < 0.01) this.velocity.x = 0;
+                if (Math.abs(this.velocity.y) < 0.01) this.velocity.y = 0;
+            }
+            
+            processInput(input) {
+                // Aceleração - Lógica melhorada para evitar conflitos
+                if (input.forward && !input.backward) {
+                    // Acelerar para frente
+                    if (this.acceleration < 0) {
+                        // Se estava indo para trás, frear primeiro
+                        this.acceleration = Math.min(0, this.acceleration + 0.15);
+                    } else {
+                        // Acelerar normalmente
+                        this.acceleration = Math.min(this.acceleration + 0.1, this.maxAcceleration);
+                    }
+                } else if (input.backward && !input.forward) {
+                    // Acelerar para trás
+                    if (this.acceleration > 0) {
+                        // Se estava indo para frente, frear primeiro
+                        this.acceleration = Math.max(0, this.acceleration - 0.15);
+                    } else {
+                        // Acelerar para trás
+                        this.acceleration = Math.max(this.acceleration - 0.1, -this.maxDeceleration);
+                    }
+                } else {
+                    // Nenhuma tecla pressionada - desaceleração natural
+                    if (this.acceleration > 0) {
+                        this.acceleration = Math.max(0, this.acceleration - 0.08);
+                    } else if (this.acceleration < 0) {
+                        this.acceleration = Math.min(0, this.acceleration + 0.08);
+                    }
+                }
+                
+                // Direção
+                if (input.left) {
+                    this.turn(-1);
+                } else if (input.right) {
+                    this.turn(1);
+                } else {
+                    // Retorno gradual da direção
+                    this.driftAngle *= 0.95;
+                }
+            }
+            
+            turn(direction) {
+                const turnAmount = this.turnSpeed * direction;
+                this.angle += turnAmount;
+                
+                // Detectar mudança de direção para ativar drift
+                if (Math.sign(direction) !== Math.sign(this.lastTurnDirection) && this.speed > 2) {
+                    this.isDrifting = true;
+                    this.driftAngle = this.angle;
+                }
+                
+                this.lastTurnDirection = direction;
+                
+                // Aplicar efeito de drift
+                if (this.isDrifting && this.speed > 3) {
+                    const driftEffect = this.driftFactor * this.speed * 0.01;
+                    this.velocity.x += Math.sin(this.angle + Math.PI/2) * driftEffect * direction;
+                    this.velocity.y -= Math.cos(this.angle + Math.PI/2) * driftEffect * direction;
+                }
+                
+                // Desativar drift quando velocidade baixa
+                if (this.speed < 1) {
+                    this.isDrifting = false;
+                }
+            }
+            
+            render(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                
+                // Corpo principal do carro
+                ctx.fillStyle = this.isDrifting ? '#ff6666' : '#ff4444';
+                ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height);
+                
+                // Detalhes do carro
+                ctx.fillStyle = '#333';
+                ctx.fillRect(-this.width/2 + 2, -this.height/2 + 5, this.width - 4, 10);
+                ctx.fillRect(-this.width/2 + 2, this.height/2 - 15, this.width - 4, 10);
+                
+                // Faróis
+                ctx.fillStyle = '#ffff00';
+                ctx.fillRect(-this.width/2 + 3, -this.height/2 + 2, 4, 4);
+                ctx.fillRect(this.width/2 - 7, -this.height/2 + 2, 4, 4);
+                
+                // Indicador de drift
+                if (this.isDrifting) {
+                    ctx.strokeStyle = '#ffff00';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(-this.width/2 - 10, 0);
+                    ctx.lineTo(-this.width/2 - 20, 0);
+                    ctx.stroke();
+                }
+                
+                ctx.restore();
+            }
+            
+            // Verificar colisão com bordas
+            checkBounds(canvasWidth, canvasHeight) {
+                const margin = Math.max(this.width, this.height) / 2;
+                
+                // Colisão com bordas esquerda e direita
+                if (this.x < margin) {
+                    this.x = margin;
+                    this.velocity.x = Math.abs(this.velocity.x) * 0.3; // Reduzido de 0.5 para 0.3
+                    this.acceleration = Math.max(0, this.acceleration); // Forçar parada se estiver indo para trás
+                }
+                if (this.x > canvasWidth - margin) {
+                    this.x = canvasWidth - margin;
+                    this.velocity.x = -Math.abs(this.velocity.x) * 0.3; // Reduzido de 0.5 para 0.3
+                    this.acceleration = Math.max(0, this.acceleration); // Forçar parada se estiver indo para trás
+                }
+                
+                // Colisão com bordas superior e inferior
+                if (this.y < margin) {
+                    this.y = margin;
+                    this.velocity.y = Math.abs(this.velocity.y) * 0.3; // Reduzido de 0.5 para 0.3
+                    this.acceleration = Math.max(0, this.acceleration); // Forçar parada se estiver indo para trás
+                }
+                if (this.y > canvasHeight - margin) {
+                    this.y = canvasHeight - margin;
+                    this.velocity.y = Math.abs(this.velocity.y) * 0.3; // Reduzido de 0.5 para 0.3
+                    this.acceleration = Math.max(0, this.acceleration); // Forçar parada se estiver indo para trás
+                }
+                
+                // Desativar drift se colidir com bordas
+                if (this.x <= margin || this.x >= canvasWidth - margin || 
+                    this.y <= margin || this.y >= canvasHeight - margin) {
+                    this.isDrifting = false;
+                }
+            }
+        }
+
+        class Track {
+            constructor(canvasWidth, canvasHeight) {
+                this.canvasWidth = canvasWidth;
+                this.canvasHeight = canvasHeight;
+                
+                // Dimensões da pista oval
+                this.centerX = canvasWidth / 2;
+                this.centerY = canvasHeight / 2;
+                this.outerRadiusX = Math.min(canvasWidth, canvasHeight) * 0.35;
+                this.outerRadiusY = Math.min(canvasWidth, canvasHeight) * 0.25;
+                this.innerRadiusX = this.outerRadiusX - 80;
+                this.innerRadiusY = this.outerRadiusY - 80;
+                
+                // Checkpoints para contagem de voltas
+                this.checkpoints = [
+                    { x: this.centerX, y: this.centerY - this.outerRadiusY + 40, width: 60, height: 20, angle: 0 },
+                    { x: this.centerX + this.outerRadiusX - 40, y: this.centerY, width: 20, height: 60, angle: Math.PI/2 },
+                    { x: this.centerX, y: this.centerY + this.outerRadiusY - 40, width: 60, height: 20, angle: Math.PI },
+                    { x: this.centerX - this.outerRadiusX + 40, y: this.centerY, width: 20, height: 60, angle: -Math.PI/2 }
+                ];
+                
+                // Linha de chegada
+                this.finishLine = {
+                    x: this.centerX - 30,
+                    y: this.centerY - this.outerRadiusY + 40,
+                    width: 60,
+                    height: 20
+                };
+                
+                // Cores da pista
+                this.colors = {
+                    grass: '#2d5a27',
+                    track: '#8B4513',
+                    borders: '#654321',
+                    finishLine: '#FFFFFF',
+                    checkpoint: '#00FF00'
+                };
+            }
+            
+            // Verificar se um ponto está dentro da pista
+            isPointOnTrack(x, y) {
+                const dx = x - this.centerX;
+                const dy = y - this.centerY;
+                
+                // Verificar se está dentro da elipse externa
+                const outerCheck = (dx * dx) / (this.outerRadiusX * this.outerRadiusX) + 
+                                 (dy * dy) / (this.outerRadiusY * this.outerRadiusY);
+                
+                // Verificar se está fora da elipse interna
+                const innerCheck = (dx * dx) / (this.innerRadiusX * this.innerRadiusX) + 
+                                 (dy * dy) / (this.innerRadiusY * this.innerRadiusY);
+                
+                return outerCheck <= 1 && innerCheck >= 1;
+            }
+            
+            // Verificar colisão com bordas da pista
+            checkTrackCollision(car) {
+                const margin = Math.max(car.width, car.height) / 2;
+                
+                // Verificar 4 pontos do carro (cantos)
+                const carPoints = [
+                    { x: car.x + margin * Math.cos(car.angle - Math.PI/4), y: car.y + margin * Math.sin(car.angle - Math.PI/4) },
+                    { x: car.x + margin * Math.cos(car.angle + Math.PI/4), y: car.y + margin * Math.sin(car.angle + Math.PI/4) },
+                    { x: car.x + margin * Math.cos(car.angle + 3*Math.PI/4), y: car.y + margin * Math.sin(car.angle + 3*Math.PI/4) },
+                    { x: car.x + margin * Math.cos(car.angle - 3*Math.PI/4), y: car.y + margin * Math.sin(car.angle - 3*Math.PI/4) }
+                ];
+                
+                // Se qualquer ponto estiver fora da pista, há colisão
+                for (let point of carPoints) {
+                    if (!this.isPointOnTrack(point.x, point.y)) {
+                        return true;
+                    }
+                }
+                
+                return false;
+            }
+            
+            // Verificar checkpoint
+            checkCheckpoint(car, currentCheckpoint) {
+                const checkpoint = this.checkpoints[currentCheckpoint];
+                if (!checkpoint) return false;
+                
+                const dx = car.x - checkpoint.x;
+                const dy = car.y - checkpoint.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Verificar se o carro passou pelo checkpoint
+                return distance < 50; // Raio de detecção
+            }
+            
+            // Renderizar a pista
+            render(ctx) {
+                // Desenhar grama de fundo
+                ctx.fillStyle = this.colors.grass;
+                ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+                
+                // Desenhar borda externa da pista
+                ctx.fillStyle = this.colors.borders;
+                ctx.beginPath();
+                ctx.ellipse(this.centerX, this.centerY, this.outerRadiusX, this.outerRadiusY, 0, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Desenhar pista (cortar o centro)
+                ctx.fillStyle = this.colors.track;
+                ctx.beginPath();
+                ctx.ellipse(this.centerX, this.centerY, this.outerRadiusX, this.outerRadiusY, 0, 0, 2 * Math.PI);
+                ctx.ellipse(this.centerX, this.centerY, this.innerRadiusX, this.innerRadiusY, 0, 0, 2 * Math.PI);
+                ctx.fill('evenodd');
+                
+                // Desenhar borda interna da pista
+                ctx.fillStyle = this.colors.borders;
+                ctx.beginPath();
+                ctx.ellipse(this.centerX, this.centerY, this.innerRadiusX, this.innerRadiusY, 0, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Desenhar linha de chegada
+                ctx.fillStyle = this.colors.finishLine;
+                ctx.fillRect(this.finishLine.x, this.finishLine.y, this.finishLine.width, this.finishLine.height);
+                
+                // Adicionar texto "CHEGADA" na linha de chegada
+                ctx.fillStyle = '#000000';
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('CHEGADA', this.finishLine.x + this.finishLine.width/2, this.finishLine.y + this.finishLine.height/2 + 4);
+                
+                // Desenhar checkpoints (invisíveis para o jogador, mas visíveis para debug)
+                if (window.debugMode) {
+                    ctx.fillStyle = this.colors.checkpoint;
+                    ctx.globalAlpha = 0.5;
+                    for (let checkpoint of this.checkpoints) {
+                        ctx.fillRect(checkpoint.x - checkpoint.width/2, checkpoint.y - checkpoint.height/2, checkpoint.width, checkpoint.height);
+                    }
+                    ctx.globalAlpha = 1;
+                }
+            }
+            
+            // Obter posição de spawn segura
+            getSafeSpawnPosition() {
+                return {
+                    x: this.centerX,
+                    y: this.centerY - this.outerRadiusY + 100,
+                    angle: 0
+                };
+            }
+        }
+
         class Game {
             constructor() {
                 this.canvas = document.getElementById('gameCanvas');
@@ -229,22 +609,24 @@
                 this.gameTime = 0;
                 this.lap = 1;
                 this.maxLaps = 3;
+                this.lastTime = 0;
                 
-                this.player = {
-                    x: 100,
-                    y: 100,
-                    width: 30,
-                    height: 50,
-                    speed: 0,
-                    maxSpeed: 5,
-                    acceleration: 0.2,
-                    deceleration: 0.1,
-                    rotation: 0,
-                    rotationSpeed: 0.1
-                };
+                // Sistema de pista
+                this.track = null;
+                this.currentCheckpoint = 0;
+                this.checkpointProgress = 0;
+                
+                // Criar carro com física melhorada
+                this.player = new Car(400, 300);
                 
                 this.keys = {};
                 this.touchControls = {};
+                this.input = {
+                    forward: false,
+                    backward: false,
+                    left: false,
+                    right: false
+                };
                 
                 this.init();
             }
@@ -264,19 +646,26 @@
                 this.canvas.width = maxWidth;
                 this.canvas.height = maxHeight;
                 
-                // Centralizar o jogador
-                this.player.x = maxWidth / 2;
-                this.player.y = maxHeight / 2;
+                // Criar ou atualizar a pista
+                this.track = new Track(maxWidth, maxHeight);
+                
+                // Posicionar o carro na posição segura da pista
+                const spawnPos = this.track.getSafeSpawnPosition();
+                this.player.x = spawnPos.x;
+                this.player.y = spawnPos.y;
+                this.player.angle = spawnPos.angle;
             }
             
             setupEventListeners() {
                 // Controles de teclado
                 window.addEventListener('keydown', (e) => {
                     this.keys[e.key.toLowerCase()] = true;
+                    this.updateInput();
                 });
                 
                 window.addEventListener('keyup', (e) => {
                     this.keys[e.key.toLowerCase()] = false;
+                    this.updateInput();
                 });
                 
                 // Redimensionamento da janela
@@ -288,6 +677,22 @@
                 this.startBtn.addEventListener('click', () => {
                     this.startGame();
                 });
+                
+                // Sistema de debug (F1 para mostrar checkpoints)
+                window.addEventListener('keydown', (e) => {
+                    if (e.key === 'F1') {
+                        e.preventDefault();
+                        window.debugMode = !window.debugMode;
+                        console.log('Debug mode:', window.debugMode ? 'ON' : 'OFF');
+                    }
+                });
+            }
+            
+            updateInput() {
+                this.input.forward = this.keys['w'] || this.keys['arrowup'] || this.touchControls.up;
+                this.input.backward = this.keys['s'] || this.keys['arrowdown'] || this.touchControls.down;
+                this.input.left = this.keys['a'] || this.keys['arrowleft'] || this.touchControls.left;
+                this.input.right = this.keys['d'] || this.keys['arrowright'] || this.touchControls.right;
             }
             
             setupTouchControls() {
@@ -300,37 +705,45 @@
                 upBtn.addEventListener('touchstart', (e) => {
                     e.preventDefault();
                     this.touchControls.up = true;
+                    this.updateInput();
                 });
                 
                 upBtn.addEventListener('touchend', () => {
                     this.touchControls.up = false;
+                    this.updateInput();
                 });
                 
                 downBtn.addEventListener('touchstart', (e) => {
                     e.preventDefault();
                     this.touchControls.down = true;
+                    this.updateInput();
                 });
                 
                 downBtn.addEventListener('touchend', () => {
                     this.touchControls.down = false;
+                    this.updateInput();
                 });
                 
                 leftBtn.addEventListener('touchstart', (e) => {
                     e.preventDefault();
                     this.touchControls.left = true;
+                    this.updateInput();
                 });
                 
                 leftBtn.addEventListener('touchend', () => {
                     this.touchControls.left = false;
+                    this.updateInput();
                 });
                 
                 rightBtn.addEventListener('touchstart', (e) => {
                     e.preventDefault();
                     this.touchControls.right = true;
+                    this.updateInput();
                 });
                 
                 rightBtn.addEventListener('touchend', () => {
                     this.touchControls.right = false;
+                    this.updateInput();
                 });
             }
             
@@ -339,48 +752,91 @@
                 this.startScreen.classList.add('hidden');
                 this.gameTime = 0;
                 this.lap = 1;
+                
+                // Resetar sistema de checkpoints
+                this.currentCheckpoint = 0;
+                this.checkpointProgress = 0;
+                
+                // Resetar o carro na posição segura da pista
+                const spawnPos = this.track.getSafeSpawnPosition();
+                this.player.x = spawnPos.x;
+                this.player.y = spawnPos.y;
+                this.player.angle = spawnPos.angle;
+                this.player.velocity = { x: 0, y: 0 };
+                this.player.speed = 0;
+                this.player.acceleration = 0;
+                this.player.isDrifting = false;
+                
                 this.updateUI();
             }
             
             updatePlayer() {
-                // Controles de movimento
-                let moving = false;
+                // Calcular delta time para física consistente
+                const currentTime = performance.now();
+                const deltaTime = (currentTime - this.lastTime) / 16.67; // Normalizar para ~60 FPS
+                this.lastTime = currentTime;
                 
-                if (this.keys['w'] || this.keys['arrowup'] || this.touchControls.up) {
-                    this.player.speed = Math.min(this.player.speed + this.player.acceleration, this.player.maxSpeed);
-                    moving = true;
+                // Atualizar o carro com física
+                this.player.update(this.input, deltaTime);
+                
+                // Verificar colisão com a pista
+                if (this.track && this.track.checkTrackCollision(this.player)) {
+                    this.handleTrackCollision();
                 }
                 
-                if (this.keys['s'] || this.keys['arrowdown'] || this.touchControls.down) {
-                    this.player.speed = Math.max(this.player.speed - this.player.acceleration, -this.player.maxSpeed / 2);
-                    moving = true;
+                // Verificar checkpoints
+                if (this.track && this.track.checkCheckpoint(this.player, this.currentCheckpoint)) {
+                    this.handleCheckpoint();
+                }
+            }
+            
+            handleTrackCollision() {
+                // Resetar posição do carro para posição segura
+                const spawnPos = this.track.getSafeSpawnPosition();
+                this.player.x = spawnPos.x;
+                this.player.y = spawnPos.y;
+                this.player.angle = spawnPos.angle;
+                this.player.velocity = { x: 0, y: 0 };
+                this.player.speed = 0;
+                this.player.acceleration = 0;
+                this.player.isDrifting = false;
+                
+                // Penalidade: voltar ao checkpoint anterior
+                if (this.currentCheckpoint > 0) {
+                    this.currentCheckpoint--;
                 }
                 
-                if (this.keys['a'] || this.keys['arrowleft'] || this.touchControls.left) {
-                    this.player.rotation -= this.player.rotationSpeed;
+                console.log('Carro saiu da pista! Resetando posição...');
+            }
+            
+            handleCheckpoint() {
+                this.currentCheckpoint++;
+                this.checkpointProgress = (this.currentCheckpoint / this.track.checkpoints.length) * 100;
+                
+                // Se completou todos os checkpoints, completou uma volta
+                if (this.currentCheckpoint >= this.track.checkpoints.length) {
+                    this.completeLap();
                 }
                 
-                if (this.keys['d'] || this.keys['arrowright'] || this.touchControls.right) {
-                    this.player.rotation += this.player.rotationSpeed;
+                console.log(`Checkpoint ${this.currentCheckpoint} alcançado! Progresso: ${this.checkpointProgress.toFixed(1)}%`);
+            }
+            
+            completeLap() {
+                this.lap++;
+                this.currentCheckpoint = 0;
+                this.checkpointProgress = 0;
+                
+                if (this.lap > this.maxLaps) {
+                    this.gameWon();
+                } else {
+                    console.log(`Volta ${this.lap - 1} completada!`);
                 }
-                
-                // Desaceleração natural
-                if (!moving) {
-                    if (this.player.speed > 0) {
-                        this.player.speed = Math.max(0, this.player.speed - this.player.deceleration);
-                    } else if (this.player.speed < 0) {
-                        this.player.speed = Math.min(0, this.player.speed + this.player.deceleration);
-                    }
-                }
-                
-                // Atualizar posição baseada na velocidade e rotação
-                const radians = this.player.rotation;
-                this.player.x += Math.sin(radians) * this.player.speed;
-                this.player.y -= Math.cos(radians) * this.player.speed;
-                
-                // Manter o jogador dentro dos limites do canvas
-                this.player.x = Math.max(this.player.width/2, Math.min(this.canvas.width - this.player.width/2, this.player.x));
-                this.player.y = Math.max(this.player.height/2, Math.min(this.canvas.height - this.player.height/2, this.player.y));
+            }
+            
+            gameWon() {
+                this.gameRunning = false;
+                console.log('Parabéns! Você completou todas as voltas!');
+                // Aqui você pode adicionar uma tela de vitória
             }
             
             updateGame() {
@@ -389,11 +845,16 @@
                     this.updatePlayer();
                     this.updateUI();
                 }
+                
+                // Inicializar lastTime na primeira execução
+                if (this.lastTime === 0) {
+                    this.lastTime = performance.now();
+                }
             }
             
             updateUI() {
                 // Atualizar velocidade
-                const speedKmh = Math.round(Math.abs(this.player.speed) * 20);
+                const speedKmh = Math.round(this.player.speed * 15);
                 document.getElementById('speed').textContent = speedKmh;
                 
                 // Atualizar tempo
@@ -404,77 +865,49 @@
                 
                 // Atualizar volta
                 document.getElementById('lap').textContent = this.lap;
+                
+                // Atualizar checkpoint
+                if (this.track) {
+                    document.getElementById('checkpoint').textContent = `${this.currentCheckpoint + 1}/${this.track.checkpoints.length}`;
+                }
             }
             
             render() {
                 // Limpar canvas
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                 
-                // Desenhar pista (grid simples)
-                this.drawTrack();
+                // Desenhar pista oval
+                if (this.track) {
+                    this.track.render(this.ctx);
+                }
                 
-                // Desenhar jogador
-                this.drawPlayer();
+                // Desenhar carro usando a classe Car
+                this.player.render(this.ctx);
                 
                 // Desenhar elementos da pista
                 this.drawTrackElements();
             }
             
-            drawTrack() {
-                // Grid da pista
-                this.ctx.strokeStyle = '#fff';
-                this.ctx.lineWidth = 1;
-                this.ctx.globalAlpha = 0.3;
-                
-                const gridSize = 50;
-                for (let x = 0; x < this.canvas.width; x += gridSize) {
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(x, 0);
-                    this.ctx.lineTo(x, this.canvas.height);
-                    this.ctx.stroke();
-                }
-                
-                for (let y = 0; y < this.canvas.height; y += gridSize) {
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(0, y);
-                    this.ctx.lineTo(this.canvas.width, y);
-                    this.ctx.stroke();
-                }
-                
-                this.ctx.globalAlpha = 1;
-            }
+
             
-            drawPlayer() {
-                this.ctx.save();
-                this.ctx.translate(this.player.x, this.player.y);
-                this.ctx.rotate(this.player.rotation);
-                
-                // Corpo do carro
-                this.ctx.fillStyle = '#ff4444';
-                this.ctx.fillRect(-this.player.width/2, -this.player.height/2, this.player.width, this.player.height);
-                
-                // Detalhes do carro
-                this.ctx.fillStyle = '#333';
-                this.ctx.fillRect(-this.player.width/2 + 2, -this.player.height/2 + 5, this.player.width - 4, 10);
-                this.ctx.fillRect(-this.player.width/2 + 2, this.player.height/2 - 15, this.player.width - 4, 10);
-                
-                // Faróis
-                this.ctx.fillStyle = '#ffff00';
-                this.ctx.fillRect(-this.player.width/2 + 3, -this.player.height/2 + 2, 4, 4);
-                this.ctx.fillRect(this.player.width/2 - 7, -this.player.height/2 + 2, 4, 4);
-                
-                this.ctx.restore();
-            }
+
             
             drawTrackElements() {
-                // Linha de chegada
-                this.ctx.fillStyle = '#fff';
-                this.ctx.fillRect(0, 50, 100, 10);
+                // Mostrar progresso dos checkpoints
+                if (this.track) {
+                    this.ctx.fillStyle = 'rgba(0, 255, 0, 0.3)';
+                    this.ctx.font = 'bold 16px Arial';
+                    this.ctx.textAlign = 'left';
+                    this.ctx.fillText(`Checkpoint: ${this.currentCheckpoint + 1}/${this.track.checkpoints.length}`, 20, this.canvas.height - 40);
+                    this.ctx.fillText(`Progresso: ${this.checkpointProgress.toFixed(1)}%`, 20, this.canvas.height - 20);
+                }
                 
-                // Checkpoints
-                this.ctx.fillStyle = '#00ff00';
-                this.ctx.fillRect(this.canvas.width - 100, 100, 10, 100);
-                this.ctx.fillRect(200, this.canvas.height - 100, 100, 10);
+                // Mostrar instruções de debug (opcional)
+                if (window.debugMode) {
+                    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                    this.ctx.font = '12px Arial';
+                    this.ctx.fillText('Debug: Pressione F1 para mostrar checkpoints', 20, 30);
+                }
             }
             
             gameLoop() {
