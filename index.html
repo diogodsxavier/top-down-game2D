@@ -147,6 +147,281 @@
             border-radius: 12px;
         }
 
+        #leaderboard {
+            position: absolute;
+            top: 190px;
+            right: 20px;
+            width: 200px;
+            background: rgba(0,0,0,0.8);
+            border: 3px solid #fff;
+            border-radius: 15px;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            padding: 15px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #leaderboard h3 {
+            color: #fff;
+            text-align: center;
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .leader-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 5px;
+            margin: 3px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+
+        .leader-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(2px);
+        }
+
+        .leader-item.current-player {
+            background: rgba(255, 215, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.6);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .position {
+            color: #ffd93d;
+            font-weight: bold;
+            min-width: 25px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .car-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            margin: 0 5px;
+            box-shadow: 0 0 4px rgba(0,0,0,0.5);
+        }
+
+        .car-indicator.player {
+            background: #ff4444;
+        }
+
+        .car-indicator.ai1 {
+            background: #00ff00;
+        }
+
+        .car-indicator.ai2 {
+            background: #0088ff;
+        }
+
+        .car-indicator.ai3 {
+            background: #ff8800;
+        }
+
+        .name {
+            color: #fff;
+            flex: 1;
+            text-align: left;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .time {
+            color: #4ecdc4;
+            font-weight: bold;
+            min-width: 35px;
+            text-align: right;
+            font-size: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        /* Power-up UI Styles */
+        #powerupUI {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 250px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #powerupUI h3 {
+            margin: 0 0 10px 0;
+            color: #4CAF50;
+            font-size: 14px;
+            text-align: center;
+            text-shadow: 0 0 8px rgba(76, 175, 80, 0.8);
+        }
+
+        .active-powerup {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .powerup-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 10px;
+            box-shadow: 0 0 12px currentColor;
+            animation: powerupPulse 2s infinite;
+        }
+
+        @keyframes powerupPulse {
+            0%, 100% { box-shadow: 0 0 12px currentColor; }
+            50% { box-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+        }
+
+        .powerup-speed { background: linear-gradient(45deg, #FFD700, #FFA500); color: #FFD700; }
+        .powerup-turbo { background: linear-gradient(45deg, #FF4500, #FF6347); color: #FF4500; }
+        .powerup-oil { background: linear-gradient(45deg, #8B4513, #654321); color: #8B4513; }
+        .powerup-repair { background: linear-gradient(45deg, #32CD32, #228B22); color: #32CD32; }
+
+        .powerup-info {
+            flex: 1;
+            color: white;
+            font-size: 12px;
+        }
+
+        .powerup-name {
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .powerup-duration {
+            background: rgba(76, 175, 80, 0.2);
+            height: 4px;
+            border-radius: 2px;
+            margin-top: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .powerup-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.1s linear;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+        }
+
+        /* Audio Controls Styles */
+        #audioControls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 250px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 15;
+        }
+
+        #audioControls h3 {
+            margin: 0 0 15px 0;
+            color: #4CAF50;
+            font-size: 14px;
+            text-align: center;
+            text-shadow: 0 0 8px rgba(76, 175, 80, 0.8);
+        }
+
+        .audio-control {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            gap: 10px;
+        }
+
+        .audio-control label {
+            color: white;
+            font-size: 12px;
+            min-width: 50px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .audio-control input[type="range"] {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .audio-control input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #4CAF50;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+        }
+
+        .audio-control input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #4CAF50;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+        }
+
+        .audio-control span {
+            color: #4CAF50;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 35px;
+            text-align: right;
+        }
+
+        .audio-btn {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+            color: #4CAF50;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+
+        .audio-btn:hover {
+            background: rgba(76, 175, 80, 0.3);
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+        }
+
+        .audio-btn.muted {
+            background: rgba(244, 67, 54, 0.2);
+            border-color: #f44336;
+            color: #f44336;
+        }
+
+        .audio-btn.muted:hover {
+            background: rgba(244, 67, 54, 0.3);
+            box-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+        }
+
         #gameControls {
             position: absolute;
             bottom: 20px;
@@ -523,9 +798,66 @@
             <canvas id="miniMapCanvas"></canvas>
         </div>
 
+        <div id="leaderboard">
+            <h3>🏁 Ranking</h3>
+            <div id="leaderboardList">
+                <div class="leader-item">
+                    <span class="position">1°</span>
+                    <span class="car-indicator player"></span>
+                    <span class="name">Você</span>
+                    <span class="time">--:--</span>
+                </div>
+                <div class="leader-item">
+                    <span class="position">2°</span>
+                    <span class="car-indicator ai1"></span>
+                    <span class="name">Speed</span>
+                    <span class="time">--:--</span>
+                </div>
+                <div class="leader-item">
+                    <span class="position">3°</span>
+                    <span class="car-indicator ai2"></span>
+                    <span class="name">Turbo</span>
+                    <span class="time">--:--</span>
+                </div>
+                <div class="leader-item">
+                    <span class="position">4°</span>
+                    <span class="car-indicator ai3"></span>
+                    <span class="name">Nitro</span>
+                    <span class="time">--:--</span>
+                </div>
+            </div>
+        </div>
+
         <div id="gameControls">
             <button class="game-btn secondary" id="pauseBtn">⏸️ Pausar</button>
             <button class="game-btn danger" id="restartBtn">🔄 Reiniciar</button>
+        </div>
+
+        <!-- Power-up UI -->
+        <div id="powerupUI" style="display: none;">
+            <h3>⚡ Power-ups Ativos</h3>
+            <div id="activePowerups"></div>
+        </div>
+
+        <!-- Audio Controls -->
+        <div id="audioControls">
+            <h3>🔊 Áudio</h3>
+            <div class="audio-control">
+                <label>Música:</label>
+                <input type="range" id="musicVolume" min="0" max="100" value="50">
+                <span id="musicVolumeValue">50%</span>
+            </div>
+            <div class="audio-control">
+                <label>Efeitos:</label>
+                <input type="range" id="sfxVolume" min="0" max="100" value="70">
+                <span id="sfxVolumeValue">70%</span>
+            </div>
+            <div class="audio-control">
+                <label>Motor:</label>
+                <input type="range" id="engineVolume" min="0" max="100" value="60">
+                <span id="engineVolumeValue">60%</span>
+            </div>
+            <button id="muteBtn" class="audio-btn">🔇 Mudo</button>
         </div>
 
         <div id="mobileControls">
@@ -567,11 +899,16 @@
 
     <script>
         class Car {
-            constructor(x, y) {
+            constructor(x, y, audioManager = null) {
                 // Propriedades físicas
                 this.x = x;
                 this.y = y;
                 this.angle = 0;
+                
+                // Referência ao sistema de áudio
+                this.audioManager = audioManager;
+                this.lastEngineSoundTime = 0;
+                this.engineSoundInterval = 100; // Intervalo entre sons do motor (ms)
                 this.velocity = { x: 0, y: 0 };
                 this.speed = 0;
                 this.acceleration = 0;
@@ -591,6 +928,7 @@
                 this.maxAcceleration = 2.0;
                 this.maxDeceleration = 1.5;
                 this.friction = 0.95;
+                this.originalFriction = 0.95;
                 this.airResistance = 0.99;
                 this.turnSpeed = 0.15;
                 this.driftFactor = 0.25;
@@ -603,6 +941,13 @@
                 // Sistema de partículas
                 this.particles = [];
                 this.lastParticleTime = 0;
+                
+                // Sistema de rastro
+                this.trail = [];
+                this.maxTrailLength = 20;
+                
+                // Efeitos especiais
+                this.hasTurboEffect = false;
             }
             
             update(deltaTime, input, track) {
@@ -638,22 +983,45 @@
                 
                 // Atualizar partículas
                 this.updateParticles(deltaTime);
+                
+                // Atualizar rastro
+                this.updateTrail();
             }
             
             // Sistema de partículas
-            createParticle() {
+            createParticle(type = 'normal') {
                 const currentTime = performance.now();
                 if (currentTime - this.lastParticleTime > 50) { // Criar partícula a cada 50ms
-                    const particle = {
-                        x: this.x - Math.sin(this.angle) * (this.height / 2 + 5),
-                        y: this.y + Math.cos(this.angle) * (this.height / 2 + 5),
-                        vx: (Math.random() - 0.5) * 2,
-                        vy: (Math.random() - 0.5) * 2,
-                        life: 1.0,
-                        decay: 0.02,
-                        size: Math.random() * 3 + 2,
-                        color: this.getParticleColor()
-                    };
+                    let particle;
+                    
+                    if (type === 'dust') {
+                        // Partículas de poeira ao frear
+                        particle = {
+                            x: this.x - Math.sin(this.angle) * (this.height / 2 + 5),
+                            y: this.y + Math.cos(this.angle) * (this.height / 2 + 5),
+                            vx: (Math.random() - 0.5) * 3,
+                            vy: (Math.random() - 0.5) * 3,
+                            life: 1.0,
+                            decay: 0.015,
+                            size: Math.random() * 4 + 3,
+                            color: '#8B7355',
+                            type: 'dust'
+                        };
+                    } else {
+                        // Partículas normais de aceleração
+                        particle = {
+                            x: this.x - Math.sin(this.angle) * (this.height / 2 + 5),
+                            y: this.y + Math.cos(this.angle) * (this.height / 2 + 5),
+                            vx: (Math.random() - 0.5) * 2,
+                            vy: (Math.random() - 0.5) * 2,
+                            life: 1.0,
+                            decay: 0.02,
+                            size: Math.random() * 3 + 2,
+                            color: this.getParticleColor(),
+                            type: 'normal'
+                        };
+                    }
+                    
                     this.particles.push(particle);
                     this.lastParticleTime = currentTime;
                 }
@@ -673,7 +1041,12 @@
             updateParticles(deltaTime) {
                 // Criar partículas quando acelerando
                 if (this.acceleration > 0.1 && this.speed > 1) {
-                    this.createParticle();
+                    this.createParticle('normal');
+                }
+                
+                // Criar partículas de poeira ao frear
+                if (this.acceleration < -0.1 && this.speed > 2) {
+                    this.createParticle('dust');
                 }
                 
                 // Atualizar partículas existentes
@@ -691,22 +1064,84 @@
                 }
             }
             
+            updateTrail() {
+                // Adicionar posição atual ao rastro
+                this.trail.push({
+                    x: this.x,
+                    y: this.y,
+                    angle: this.angle,
+                    speed: this.speed,
+                    isDrifting: this.isDrifting
+                });
+                
+                // Manter apenas as últimas posições
+                if (this.trail.length > this.maxTrailLength) {
+                    this.trail.shift();
+                }
+            }
+            
+            renderTrail(ctx) {
+                if (this.trail.length < 2) return;
+                
+                ctx.save();
+                
+                // Desenhar rastro com transparência baseada na velocidade
+                for (let i = 0; i < this.trail.length - 1; i++) {
+                    const current = this.trail[i];
+                    const next = this.trail[i + 1];
+                    
+                    // Transparência baseada na posição no rastro
+                    const alpha = (i / this.trail.length) * 0.6;
+                    ctx.globalAlpha = alpha;
+                    
+                    // Cor baseada na velocidade e estado de drift
+                    if (current.isDrifting) {
+                        ctx.strokeStyle = `hsl(${Math.random() * 20 + 15}, 100%, 60%)`; // Laranja/vermelho
+                    } else if (current.speed > 8) {
+                        ctx.strokeStyle = `hsl(${Math.random() * 30 + 25}, 100%, 65%)`; // Amarelo/laranja
+                    } else {
+                        ctx.strokeStyle = `hsl(${Math.random() * 40 + 35}, 100%, 70%)`; // Amarelo
+                    }
+                    
+                    ctx.lineWidth = Math.max(1, current.speed * 0.5);
+                    ctx.beginPath();
+                    ctx.moveTo(current.x, current.y);
+                    ctx.lineTo(next.x, next.y);
+                    ctx.stroke();
+                }
+                
+                ctx.restore();
+            }
+            
             renderParticles(ctx) {
                 ctx.save();
                 for (const particle of this.particles) {
                     ctx.globalAlpha = particle.life;
-                    ctx.fillStyle = particle.color;
-                    ctx.beginPath();
-                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                    ctx.fill();
                     
-                    // Adicionar brilho para partículas de alta velocidade
-                    if (this.speed > 6) {
-                        ctx.globalAlpha = particle.life * 0.5;
-                        ctx.fillStyle = '#ffffff';
+                    if (particle.type === 'dust') {
+                        // Renderizar partículas de poeira como retângulos
+                        ctx.fillStyle = particle.color;
+                        ctx.fillRect(
+                            particle.x - particle.size/2, 
+                            particle.y - particle.size/2, 
+                            particle.size, 
+                            particle.size
+                        );
+                    } else {
+                        // Renderizar partículas normais como círculos
+                        ctx.fillStyle = particle.color;
                         ctx.beginPath();
-                        ctx.arc(particle.x, particle.y, particle.size * 0.5, 0, Math.PI * 2);
+                        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
                         ctx.fill();
+                        
+                        // Adicionar brilho para partículas de alta velocidade
+                        if (this.speed > 6) {
+                            ctx.globalAlpha = particle.life * 0.5;
+                            ctx.fillStyle = '#ffffff';
+                            ctx.beginPath();
+                            ctx.arc(particle.x, particle.y, particle.size * 0.5, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
                     }
                 }
                 ctx.restore();
@@ -747,6 +1182,32 @@
                 // Debug: mostrar velocidade resultante
                 if (this.speed > 0.1) {
                     console.log('Velocidade atual:', this.speed.toFixed(2), 'Posição:', { x: this.x.toFixed(2), y: this.y.toFixed(2) });
+                }
+                
+                // Tocar sons do motor
+                this.playEngineSounds();
+            }
+            
+            playEngineSounds() {
+                if (!this.audioManager || Date.now() - this.lastEngineSoundTime < this.engineSoundInterval) {
+                    return;
+                }
+                
+                this.lastEngineSoundTime = Date.now();
+                
+                // Determinar tipo de som baseado na velocidade e aceleração
+                if (this.acceleration > 0.1) {
+                    // Acelerando
+                    this.audioManager.playEngineSound(this, 'accelerating');
+                } else if (this.acceleration < -0.1) {
+                    // Freando
+                    this.audioManager.playEngineSound(this, 'braking');
+                } else if (this.speed > 8) {
+                    // Alta velocidade
+                    this.audioManager.playEngineSound(this, 'highSpeed');
+                } else if (this.speed > 0.5) {
+                    // Velocidade normal
+                    this.audioManager.playEngineSound(this, 'idle');
                 }
             }
             
@@ -807,6 +1268,12 @@
             
             render(ctx) {
                 ctx.save();
+                
+                // Efeito de blur quando usa turbo
+                if (this.hasTurboEffect && this.audioManager) {
+                    ctx.filter = 'blur(2px)';
+                }
+                
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.angle);
                 
@@ -835,6 +1302,9 @@
                 }
                 
                 ctx.restore();
+                
+                // Renderizar rastro
+                this.renderTrail(ctx);
                 
                 // Renderizar partículas
                 this.renderParticles(ctx);
@@ -944,6 +1414,814 @@
                     this.y <= margin || this.y >= canvasHeight - margin) {
                     this.isDrifting = false;
                 }
+            }
+        }
+
+        class AICar extends Car {
+            constructor(x, y, id, color = '#00ff00', difficulty = 'medium', audioManager = null) {
+                super(x, y, audioManager);
+                
+                // Propriedades específicas da IA
+                this.id = id;
+                this.carColor = color;
+                this.difficulty = difficulty;
+                this.isAI = true;
+                
+                // Sistema de pathfinding
+                this.targetPoint = { x: x, y: y };
+                this.waypointIndex = 0;
+                this.waypoints = [];
+                this.pathUpdateTimer = 0;
+                
+                // Comportamento da IA
+                this.aggressiveness = Math.random() * 0.5 + 0.3; // 0.3 - 0.8
+                this.reactTime = Math.random() * 100 + 50; // 50-150ms
+                this.lastDecision = 0;
+                
+                // Estatísticas de corrida
+                this.lapTime = 0;
+                this.bestLapTime = Infinity;
+                this.currentLap = 1;
+                this.checkpointsPassed = 0;
+                this.raceProgress = 0; // 0-100% para ranking
+                
+                // Configurar dificuldade
+                this.configureDifficulty(difficulty);
+            }
+            
+            configureDifficulty(difficulty) {
+                switch(difficulty) {
+                    case 'easy':
+                        this.maxSpeed = 12;
+                        this.maxAcceleration = 1.5;
+                        this.turnSpeed = 0.12;
+                        this.aggressiveness = 0.3;
+                        this.reactTime = 150;
+                        break;
+                    case 'medium':
+                        this.maxSpeed = 14;
+                        this.maxAcceleration = 1.8;
+                        this.turnSpeed = 0.14;
+                        this.aggressiveness = 0.5;
+                        this.reactTime = 100;
+                        break;
+                    case 'hard':
+                        this.maxSpeed = 16;
+                        this.maxAcceleration = 2.2;
+                        this.turnSpeed = 0.16;
+                        this.aggressiveness = 0.7;
+                        this.reactTime = 70;
+                        break;
+                }
+            }
+            
+            generateWaypoints(track) {
+                // Verificar se a pista é válida
+                if (!track || !track.centerX || !track.centerY || 
+                    !track.outerRadiusX || !track.outerRadiusY || 
+                    !track.innerRadiusX || !track.innerRadiusY) {
+                    console.warn('Pista inválida para gerar waypoints');
+                    return;
+                }
+                
+                this.waypoints = [];
+                const numWaypoints = 16;
+                
+                for (let i = 0; i < numWaypoints; i++) {
+                    const angle = (i / numWaypoints) * Math.PI * 2;
+                    const radiusX = (track.outerRadiusX + track.innerRadiusX) / 2;
+                    const radiusY = (track.outerRadiusY + track.innerRadiusY) / 2;
+                    
+                    // Adicionar variação aleatória para tornar mais natural
+                    const variation = (Math.random() - 0.5) * 20;
+                    
+                    const x = track.centerX + Math.cos(angle) * (radiusX + variation);
+                    const y = track.centerY + Math.sin(angle) * (radiusY + variation);
+                    
+                    this.waypoints.push({ x, y });
+                }
+                
+                console.log(`Waypoints gerados para ${this.name}:`, this.waypoints.length);
+            }
+            
+            updateAI(deltaTime, track, allCars) {
+                // Verificar se os parâmetros são válidos
+                if (!track || !allCars || !Array.isArray(allCars)) {
+                    console.warn('Parâmetros inválidos para updateAI');
+                    return;
+                }
+                
+                const currentTime = performance.now();
+                
+                // Atualizar path periodicamente
+                if (currentTime - this.pathUpdateTimer > this.reactTime) {
+                    this.updatePath(track, allCars);
+                    this.pathUpdateTimer = currentTime;
+                }
+                
+                // Gerar input baseado na IA
+                const aiInput = this.generateAIInput(track, allCars);
+                
+                // Aplicar o input e atualizar física
+                this.processInput(aiInput);
+                this.applyPhysics(deltaTime);
+                
+                // Atualizar posição
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                
+                // Aplicar resistência do ar
+                this.speed *= this.airResistance;
+                
+                // Verificar colisão com bordas
+                if (track && track.canvasWidth && track.canvasHeight) {
+                    this.checkBounds(track.canvasWidth, track.canvasHeight);
+                }
+                
+                // Atualizar progresso na corrida
+                this.updateRaceProgress(track);
+                
+                // Atualizar partículas
+                this.updateParticles(deltaTime);
+            }
+            
+            updatePath(track, allCars) {
+                // Verificar se a pista é válida
+                if (!track) {
+                    console.warn('Pista não disponível para updatePath');
+                    return;
+                }
+                
+                if (this.waypoints.length === 0) {
+                    this.generateWaypoints(track);
+                }
+                
+                // Verificar se há waypoints válidos
+                if (this.waypoints.length === 0) {
+                    console.warn('Nenhum waypoint disponível');
+                    return;
+                }
+                
+                // Encontrar waypoint mais próximo
+                let closestWaypoint = 0;
+                let closestDistance = Infinity;
+                
+                for (let i = 0; i < this.waypoints.length; i++) {
+                    const wp = this.waypoints[i];
+                    if (wp && typeof wp.x === 'number' && typeof wp.y === 'number') {
+                        const dist = Math.sqrt((this.x - wp.x) ** 2 + (this.y - wp.y) ** 2);
+                        
+                        if (dist < closestDistance) {
+                            closestDistance = dist;
+                            closestWaypoint = i;
+                        }
+                    }
+                }
+                
+                // Definir próximo waypoint como alvo
+                this.waypointIndex = (closestWaypoint + 1) % this.waypoints.length;
+                const nextWaypoint = this.waypoints[this.waypointIndex];
+                
+                if (nextWaypoint && typeof nextWaypoint.x === 'number' && typeof nextWaypoint.y === 'number') {
+                    this.targetPoint = { ...nextWaypoint };
+                    
+                    // Evitar outros carros
+                    this.avoidCars(allCars);
+                } else {
+                    console.warn('Waypoint inválido encontrado');
+                }
+            }
+            
+            avoidCars(allCars) {
+                const avoidanceRadius = 80;
+                
+                for (let car of allCars) {
+                    if (car === this || !car.isAI) continue;
+                    
+                    const dx = car.x - this.x;
+                    const dy = car.y - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < avoidanceRadius) {
+                        // Ajustar target point para evitar colisão
+                        const avoidAngle = Math.atan2(dy, dx) + Math.PI/2;
+                        const avoidDistance = 40;
+                        
+                        this.targetPoint.x += Math.cos(avoidAngle) * avoidDistance;
+                        this.targetPoint.y += Math.sin(avoidAngle) * avoidDistance;
+                    }
+                }
+            }
+            
+            generateAIInput(track, allCars) {
+                const input = {
+                    forward: false,
+                    backward: false,
+                    left: false,
+                    right: false
+                };
+                
+                // Verificar se o target point é válido
+                if (!this.targetPoint || typeof this.targetPoint.x !== 'number' || typeof this.targetPoint.y !== 'number') {
+                    console.warn('Target point inválido para generateAIInput');
+                    return input;
+                }
+                
+                // Calcular direção para o target
+                const dx = this.targetPoint.x - this.x;
+                const dy = this.targetPoint.y - this.y;
+                const targetAngle = Math.atan2(dy, dx);
+                
+                // Calcular diferença angular
+                let angleDiff = targetAngle - this.angle;
+                while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+                while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+                
+                // Direção
+                const turnThreshold = 0.1;
+                if (Math.abs(angleDiff) > turnThreshold) {
+                    if (angleDiff > 0) {
+                        input.right = true;
+                    } else {
+                        input.left = true;
+                    }
+                }
+                
+                // Aceleração baseada na situação
+                const distanceToTarget = Math.sqrt(dx * dx + dy * dy);
+                const isOnGoodPath = Math.abs(angleDiff) < Math.PI/4;
+                const hasObstacle = this.detectObstacle(allCars);
+                
+                if (isOnGoodPath && !hasObstacle && this.speed < this.maxSpeed * 0.9) {
+                    input.forward = true;
+                } else if (hasObstacle || this.speed > this.maxSpeed) {
+                    input.backward = true;
+                }
+                
+                return input;
+            }
+            
+            detectObstacle(allCars) {
+                // Verificar se allCars é válido
+                if (!allCars || !Array.isArray(allCars)) {
+                    return false;
+                }
+                
+                const detectionDistance = 60;
+                const forwardX = this.x + Math.cos(this.angle) * detectionDistance;
+                const forwardY = this.y + Math.sin(this.angle) * detectionDistance;
+                
+                for (let car of allCars) {
+                    if (car === this || !car || typeof car.x !== 'number' || typeof car.y !== 'number') continue;
+                    
+                    const dx = car.x - forwardX;
+                    const dy = car.y - forwardY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 40) {
+                        return true;
+                    }
+                }
+                
+                return false;
+            }
+            
+            updateRaceProgress(track) {
+                if (!track || !track.checkpoints) return;
+                
+                // Calcular progresso baseado em checkpoints e posição na pista
+                const totalCheckpoints = track.checkpoints.length;
+                const progress = (this.checkpointsPassed / totalCheckpoints) * 100;
+                this.raceProgress = (this.currentLap - 1) * 100 + progress;
+            }
+            
+            render(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                
+                // Corpo principal do carro com cor personalizada
+                ctx.fillStyle = this.isDrifting ? this.lightenColor(this.carColor) : this.carColor;
+                ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height);
+                
+                // Detalhes do carro
+                ctx.fillStyle = '#333';
+                ctx.fillRect(-this.width/2 + 2, -this.height/2 + 5, this.width - 4, 10);
+                ctx.fillRect(-this.width/2 + 2, this.height/2 - 15, this.width - 4, 10);
+                
+                // Faróis
+                ctx.fillStyle = '#ffff00';
+                ctx.fillRect(-this.width/2 + 3, -this.height/2 + 2, 4, 4);
+                ctx.fillRect(this.width/2 - 7, -this.height/2 + 2, 4, 4);
+                
+                // Indicador de IA
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 8px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('AI', 0, 0);
+                
+                ctx.restore();
+                
+                // Renderizar partículas
+                this.renderParticles(ctx);
+                
+                // Debug: mostrar waypoints (opcional)
+                if (window.debugMode && this.waypoints.length > 0) {
+                    ctx.save();
+                    ctx.strokeStyle = this.carColor;
+                    ctx.globalAlpha = 0.3;
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    for (let i = 0; i < this.waypoints.length; i++) {
+                        const wp = this.waypoints[i];
+                        if (i === 0) {
+                            ctx.moveTo(wp.x, wp.y);
+                        } else {
+                            ctx.lineTo(wp.x, wp.y);
+                        }
+                    }
+                    ctx.closePath();
+                    ctx.stroke();
+                    
+                    // Mostrar target point
+                    ctx.fillStyle = this.carColor;
+                    ctx.globalAlpha = 0.7;
+                    ctx.beginPath();
+                    ctx.arc(this.targetPoint.x, this.targetPoint.y, 5, 0, 2 * Math.PI);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+            
+            lightenColor(color) {
+                // Função simples para clarear a cor quando fazendo drift
+                if (color.startsWith('#')) {
+                    const r = parseInt(color.slice(1, 3), 16);
+                    const g = parseInt(color.slice(3, 5), 16);
+                    const b = parseInt(color.slice(5, 7), 16);
+                    
+                    const lighterR = Math.min(255, r + 50);
+                    const lighterG = Math.min(255, g + 50);
+                    const lighterB = Math.min(255, b + 50);
+                    
+                    return `rgb(${lighterR}, ${lighterG}, ${lighterB})`;
+                }
+                return color;
+            }
+        }
+
+        // Power-up System
+        class PowerUp {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.type = type;
+                this.size = 20;
+                this.collected = false;
+                this.respawnTimer = 0;
+                this.respawnDelay = 10000; // 10 segundos
+                this.pulseTimer = 0;
+                this.animationSpeed = 0.05;
+                
+                // Configurações específicas por tipo
+                this.configureType();
+            }
+            
+            configureType() {
+                switch(this.type) {
+                    case 'speed':
+                        this.color = '#FFD700';
+                        this.name = 'Speed Boost';
+                        this.duration = 5000;
+                        this.icon = '⚡';
+                        break;
+                    case 'turbo':
+                        this.color = '#FF4500';
+                        this.name = 'Turbo';
+                        this.duration = 8000;
+                        this.icon = '🚀';
+                        break;
+                    case 'oil':
+                        this.color = '#8B4513';
+                        this.name = 'Oil Slick';
+                        this.duration = 3000;
+                        this.icon = '🛢️';
+                        break;
+                    case 'repair':
+                        this.color = '#32CD32';
+                        this.name = 'Repair Kit';
+                        this.duration = 1000;
+                        this.icon = '🔧';
+                        break;
+                }
+            }
+            
+            update(deltaTime) {
+                if (this.collected) {
+                    this.respawnTimer += deltaTime;
+                    if (this.respawnTimer >= this.respawnDelay) {
+                        this.collected = false;
+                        this.respawnTimer = 0;
+                    }
+                } else {
+                    this.pulseTimer += this.animationSpeed;
+                }
+            }
+            
+            render(ctx) {
+                if (this.collected) return;
+                
+                ctx.save();
+                
+                // Efeito de pulso
+                const pulse = Math.sin(this.pulseTimer * 10) * 0.2 + 1;
+                const currentSize = this.size * pulse;
+                
+                // Sombra/glow
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 15 * pulse;
+                
+                // Círculo principal
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, currentSize, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Círculo interno mais claro
+                ctx.fillStyle = this.lightenColor(this.color);
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, currentSize * 0.6, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Ícone (simulado com texto)
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#000000';
+                ctx.font = `${currentSize}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.icon, this.x, this.y);
+                
+                ctx.restore();
+            }
+            
+            lightenColor(color) {
+                // Função auxiliar para clarear a cor
+                const hex = color.replace('#', '');
+                const r = Math.min(255, parseInt(hex.substr(0, 2), 16) + 50);
+                const g = Math.min(255, parseInt(hex.substr(2, 2), 16) + 50);
+                const b = Math.min(255, parseInt(hex.substr(4, 2), 16) + 50);
+                return `rgb(${r}, ${g}, ${b})`;
+            }
+            
+            checkCollision(car) {
+                if (this.collected) return false;
+                
+                const dx = this.x - car.x;
+                const dy = this.y - car.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                return distance < (this.size + car.width/2);
+            }
+        }
+
+        class OilSlick {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = 40;
+                this.duration = 15000; // 15 segundos
+                this.timer = 0;
+                this.active = true;
+            }
+            
+            update(deltaTime) {
+                this.timer += deltaTime;
+                if (this.timer >= this.duration) {
+                    this.active = false;
+                }
+            }
+            
+            render(ctx) {
+                if (!this.active) return;
+                
+                ctx.save();
+                
+                // Transparência baseada no tempo
+                const alpha = Math.max(0.3, 1 - (this.timer / this.duration));
+                ctx.globalAlpha = alpha;
+                
+                // Mancha de óleo
+                ctx.fillStyle = '#2F2F2F';
+                ctx.beginPath();
+                ctx.ellipse(this.x, this.y, this.size, this.size * 0.7, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Reflexo
+                ctx.fillStyle = '#4A4A4A';
+                ctx.beginPath();
+                ctx.ellipse(this.x - 5, this.y - 5, this.size * 0.6, this.size * 0.4, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.restore();
+            }
+            
+            checkCollision(car) {
+                if (!this.active) return false;
+                
+                const dx = this.x - car.x;
+                const dy = this.y - car.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                return distance < (this.size + car.width/2);
+            }
+        }
+
+        class PowerUpManager {
+            constructor() {
+                this.powerUps = [];
+                this.oilSlicks = [];
+                this.activePowerUps = new Map(); // car -> {type, timer, originalValues}
+            }
+            
+            generatePowerUps(track) {
+                this.powerUps = [];
+                
+                // Posições estratégicas na pista
+                const positions = [
+                    // Reta principal superior
+                    {x: track.centerX - 150, y: track.centerY - track.outerRadiusY * 0.7},
+                    {x: track.centerX + 150, y: track.centerY - track.outerRadiusY * 0.7},
+                    
+                    // Curvas laterais
+                    {x: track.centerX - track.outerRadiusX * 0.7, y: track.centerY},
+                    {x: track.centerX + track.outerRadiusX * 0.7, y: track.centerY},
+                    
+                    // Reta inferior
+                    {x: track.centerX - 100, y: track.centerY + track.outerRadiusY * 0.7},
+                    {x: track.centerX + 100, y: track.centerY + track.outerRadiusY * 0.7},
+                ];
+                
+                const types = ['speed', 'turbo', 'oil', 'repair'];
+                
+                positions.forEach((pos, index) => {
+                    const type = types[index % types.length];
+                    this.powerUps.push(new PowerUp(pos.x, pos.y, type));
+                });
+            }
+            
+            update(deltaTime) {
+                // Atualizar power-ups
+                this.powerUps.forEach(powerUp => {
+                    powerUp.update(deltaTime);
+                });
+                
+                // Atualizar manchas de óleo
+                this.oilSlicks = this.oilSlicks.filter(slick => {
+                    slick.update(deltaTime);
+                    return slick.active;
+                });
+                
+                // Atualizar efeitos ativos nos carros
+                for (let [car, effects] of this.activePowerUps) {
+                    for (let effect of effects) {
+                        effect.timer -= deltaTime;
+                        if (effect.timer <= 0) {
+                            this.removePowerUpEffect(car, effect.type);
+                        }
+                    }
+                }
+            }
+            
+            render(ctx) {
+                // Renderizar power-ups
+                this.powerUps.forEach(powerUp => {
+                    powerUp.render(ctx);
+                });
+                
+                // Renderizar manchas de óleo
+                this.oilSlicks.forEach(slick => {
+                    slick.render(ctx);
+                });
+            }
+            
+            checkCollisions(cars) {
+                cars.forEach(car => {
+                    // Verificar colisões com power-ups
+                    this.powerUps.forEach(powerUp => {
+                        if (powerUp.checkCollision(car)) {
+                            this.collectPowerUp(car, powerUp);
+                        }
+                    });
+                    
+                    // Verificar colisões com manchas de óleo
+                    this.oilSlicks.forEach(slick => {
+                        if (slick.checkCollision(car) && !car.isDrifting) {
+                            this.applyOilEffect(car);
+                        }
+                    });
+                });
+            }
+            
+            collectPowerUp(car, powerUp) {
+                powerUp.collected = true;
+                this.applyPowerUpEffect(car, powerUp);
+                
+                // Som de power-up
+                if (car.audioManager) {
+                    car.audioManager.playSoundEffect('powerup');
+                }
+                
+                console.log(`${car.isAI ? 'AI' : 'Player'} coletou ${powerUp.name}!`);
+            }
+            
+            applyPowerUpEffect(car, powerUp) {
+                if (!this.activePowerUps.has(car)) {
+                    this.activePowerUps.set(car, []);
+                }
+                
+                const effects = this.activePowerUps.get(car);
+                
+                switch(powerUp.type) {
+                    case 'speed':
+                        // Backup valores originais se necessário
+                        if (!effects.some(e => e.type === 'speed')) {
+                            effects.push({
+                                type: 'speed',
+                                timer: powerUp.duration,
+                                originalMaxSpeed: car.maxSpeed
+                            });
+                            car.maxSpeed *= 1.5;
+                        } else {
+                            // Renovar efeito
+                            const speedEffect = effects.find(e => e.type === 'speed');
+                            speedEffect.timer = powerUp.duration;
+                        }
+                        break;
+                        
+                    case 'turbo':
+                        if (!effects.some(e => e.type === 'turbo')) {
+                            effects.push({
+                                type: 'turbo',
+                                timer: powerUp.duration,
+                                originalAcceleration: car.maxAcceleration
+                            });
+                            car.maxAcceleration *= 2;
+                        } else {
+                            const turboEffect = effects.find(e => e.type === 'turbo');
+                            turboEffect.timer = powerUp.duration;
+                        }
+                        
+                        // Ativar efeito visual de turbo
+                        car.hasTurboEffect = true;
+                        
+                        // Som de turbo
+                        if (car.audioManager) {
+                            car.audioManager.playSoundEffect('turbo');
+                        }
+                        break;
+                        
+                    case 'oil':
+                        // Criar mancha de óleo atrás do carro
+                        const oilX = car.x - Math.cos(car.angle) * 30;
+                        const oilY = car.y - Math.sin(car.angle) * 30;
+                        this.oilSlicks.push(new OilSlick(oilX, oilY));
+                        
+                        // Som de óleo
+                        if (car.audioManager) {
+                            car.audioManager.playSoundEffect('oil');
+                        }
+                        break;
+                        
+                    case 'repair':
+                        // Sistema de reparo (para futuro sistema de dano)
+                        car.health = Math.min(100, (car.health || 100) + 25);
+                        break;
+                }
+                
+                this.updatePowerUpUI(car.isAI ? null : car);
+            }
+            
+            applyOilEffect(car) {
+                // Fazer o carro derrapar
+                car.isDrifting = true;
+                car.friction *= 0.3; // Reduzir drasticamente a fricção
+                
+                // Aplicar força lateral aleatória
+                const sideForce = (Math.random() - 0.5) * 0.1;
+                car.angle += sideForce;
+                
+                setTimeout(() => {
+                    car.friction = car.originalFriction || 0.95;
+                }, 2000);
+            }
+            
+            removePowerUpEffect(car, type) {
+                if (!this.activePowerUps.has(car)) return;
+                
+                const effects = this.activePowerUps.get(car);
+                const effectIndex = effects.findIndex(e => e.type === type);
+                
+                if (effectIndex === -1) return;
+                
+                const effect = effects[effectIndex];
+                
+                // Restaurar valores originais
+                switch(type) {
+                    case 'speed':
+                        car.maxSpeed = effect.originalMaxSpeed;
+                        break;
+                    case 'turbo':
+                        car.maxAcceleration = effect.originalAcceleration;
+                        car.hasTurboEffect = false;
+                        break;
+                }
+                
+                effects.splice(effectIndex, 1);
+                
+                if (effects.length === 0) {
+                    this.activePowerUps.delete(car);
+                }
+                
+                this.updatePowerUpUI(car.isAI ? null : car);
+            }
+            
+            updatePowerUpUI(player = null) {
+                const powerupUI = document.getElementById('powerupUI');
+                const activePowerupsDiv = document.getElementById('activePowerups');
+                
+                // Limpar UI
+                activePowerupsDiv.innerHTML = '';
+                
+                // Obter efeitos do jogador (encontrar o jogador automaticamente se não fornecido)
+                if (!player) {
+                    // Encontrar o jogador entre os carros (aquele que não é IA)
+                    for (let [car, effects] of this.activePowerUps) {
+                        if (!car.isAI) {
+                            player = car;
+                            break;
+                        }
+                    }
+                }
+                
+                const playerEffects = player ? this.activePowerUps.get(player) || [] : [];
+                
+                if (playerEffects.length > 0) {
+                    powerupUI.style.display = 'block';
+                    
+                    playerEffects.forEach(effect => {
+                        const powerupDiv = document.createElement('div');
+                        powerupDiv.className = 'active-powerup';
+                        
+                        const icon = document.createElement('div');
+                        icon.className = `powerup-icon powerup-${effect.type}`;
+                        
+                        const info = document.createElement('div');
+                        info.className = 'powerup-info';
+                        
+                        const name = document.createElement('div');
+                        name.className = 'powerup-name';
+                        name.textContent = this.getPowerUpName(effect.type);
+                        
+                        const duration = document.createElement('div');
+                        duration.className = 'powerup-duration';
+                        
+                        const bar = document.createElement('div');
+                        bar.className = 'powerup-bar';
+                        
+                        const maxDuration = this.getPowerUpMaxDuration(effect.type);
+                        const percentage = (effect.timer / maxDuration) * 100;
+                        bar.style.width = `${Math.max(0, percentage)}%`;
+                        
+                        duration.appendChild(bar);
+                        info.appendChild(name);
+                        info.appendChild(duration);
+                        powerupDiv.appendChild(icon);
+                        powerupDiv.appendChild(info);
+                        activePowerupsDiv.appendChild(powerupDiv);
+                    });
+                } else {
+                    powerupUI.style.display = 'none';
+                }
+            }
+            
+            getPowerUpName(type) {
+                const names = {
+                    'speed': 'Speed Boost',
+                    'turbo': 'Turbo',
+                    'oil': 'Oil Slick',
+                    'repair': 'Repair Kit'
+                };
+                return names[type] || type;
+            }
+            
+            getPowerUpMaxDuration(type) {
+                const durations = {
+                    'speed': 5000,
+                    'turbo': 8000,
+                    'oil': 3000,
+                    'repair': 1000
+                };
+                return durations[type] || 5000;
             }
         }
 
@@ -1088,6 +2366,284 @@
             }
         }
 
+        // Audio System
+        class AudioManager {
+            constructor() {
+                this.audioContext = null;
+                this.masterGain = null;
+                this.musicGain = null;
+                this.sfxGain = null;
+                this.engineGain = null;
+                
+                this.volumes = {
+                    master: 1.0,
+                    music: 0.5,
+                    sfx: 0.7,
+                    engine: 0.6
+                };
+                
+                this.isMuted = false;
+                this.backgroundMusic = null;
+                this.engineSounds = new Map();
+                this.soundEffects = new Map();
+                
+                this.init();
+            }
+            
+            async init() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.setupAudioNodes();
+                    this.createEngineSounds();
+                    this.createSoundEffects();
+                    this.setupEventListeners();
+                    console.log('Sistema de áudio inicializado com sucesso');
+                } catch (error) {
+                    console.warn('Erro ao inicializar áudio:', error);
+                    this.createFallbackAudio();
+                }
+            }
+            
+            setupAudioNodes() {
+                this.masterGain = this.audioContext.createGain();
+                this.musicGain = this.audioContext.createGain();
+                this.sfxGain = this.audioContext.createGain();
+                this.engineGain = this.audioContext.createGain();
+                
+                this.masterGain.connect(this.audioContext.destination);
+                this.musicGain.connect(this.masterGain);
+                this.sfxGain.connect(this.masterGain);
+                this.engineGain.connect(this.masterGain);
+                
+                this.updateVolumes();
+            }
+            
+            createEngineSounds() {
+                // Som de motor em idle
+                this.engineSounds.set('idle', this.createOscillatorSound(80, 'sawtooth', 0.1));
+                
+                // Som de motor acelerando
+                this.engineSounds.set('accelerating', this.createOscillatorSound(120, 'sawtooth', 0.15));
+                
+                // Som de motor em alta velocidade
+                this.engineSounds.set('highSpeed', this.createOscillatorSound(200, 'sawtooth', 0.2));
+                
+                // Som de freio
+                this.engineSounds.set('braking', this.createOscillatorSound(60, 'sine', 0.3));
+            }
+            
+            createSoundEffects() {
+                // Som de colisão
+                this.soundEffects.set('collision', this.createNoiseSound(0.3, 0.1));
+                
+                // Som de power-up
+                this.soundEffects.set('powerup', this.createOscillatorSound(800, 'sine', 0.2));
+                
+                // Som de turbo
+                this.soundEffects.set('turbo', this.createOscillatorSound(400, 'square', 0.25));
+                
+                // Som de óleo
+                this.soundEffects.set('oil', this.createOscillatorSound(200, 'triangle', 0.15));
+            }
+            
+            createOscillatorSound(frequency, type, duration) {
+                return () => {
+                    if (this.isMuted) return;
+                    
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.type = type;
+                    oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+                    
+                    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(this.volumes.sfx, this.audioContext.currentTime + 0.01);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + duration);
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.sfxGain);
+                    
+                    oscillator.start();
+                    oscillator.stop(this.audioContext.currentTime + duration);
+                };
+            }
+            
+            createNoiseSound(volume, duration) {
+                return () => {
+                    if (this.isMuted) return;
+                    
+                    const bufferSize = this.audioContext.sampleRate * duration;
+                    const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
+                    const output = buffer.getChannelData(0);
+                    
+                    for (let i = 0; i < bufferSize; i++) {
+                        output[i] = Math.random() * 2 - 1;
+                    }
+                    
+                    const whiteNoise = this.audioContext.createBufferSource();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    whiteNoise.buffer = buffer;
+                    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(volume * this.volumes.sfx, this.audioContext.currentTime + 0.01);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + duration);
+                    
+                    whiteNoise.connect(gainNode);
+                    gainNode.connect(this.sfxGain);
+                    
+                    whiteNoise.start();
+                    whiteNoise.stop(this.audioContext.currentTime + duration);
+                };
+            }
+            
+            playEngineSound(car, type) {
+                if (this.isMuted || !this.engineSounds.has(type)) return;
+                
+                const sound = this.engineSounds.get(type);
+                const gainNode = this.audioContext.createGain();
+                
+                // Ajustar volume baseado na distância do carro
+                const distance = Math.sqrt(car.x * car.x + car.y * car.y);
+                const maxDistance = 1000;
+                const volume = Math.max(0, 1 - (distance / maxDistance)) * this.volumes.engine;
+                
+                gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
+                gainNode.connect(this.engineGain);
+                
+                // Criar e tocar o som
+                const oscillator = this.audioContext.createOscillator();
+                let frequency, duration;
+                
+                switch(type) {
+                    case 'idle':
+                        frequency = 80 + (car.speed * 2);
+                        duration = 0.1;
+                        break;
+                    case 'accelerating':
+                        frequency = 120 + (car.speed * 5);
+                        duration = 0.15;
+                        break;
+                    case 'highSpeed':
+                        frequency = 200 + (car.speed * 8);
+                        duration = 0.2;
+                        break;
+                    case 'braking':
+                        frequency = 60;
+                        duration = 0.3;
+                        break;
+                }
+                
+                oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+                oscillator.type = 'sawtooth';
+                
+                oscillator.connect(gainNode);
+                oscillator.start();
+                oscillator.stop(this.audioContext.currentTime + duration);
+            }
+            
+            playSoundEffect(effect) {
+                if (this.isMuted || !this.soundEffects.has(effect)) return;
+                this.soundEffects.get(effect)();
+            }
+            
+            startBackgroundMusic() {
+                if (this.isMuted || this.backgroundMusic) return;
+                
+                try {
+                    // Criar música procedural simples
+                    this.backgroundMusic = this.createProceduralMusic();
+                    this.backgroundMusic.start();
+                } catch (error) {
+                    console.warn('Erro ao iniciar música de fundo:', error);
+                }
+            }
+            
+            createProceduralMusic() {
+                const musicGain = this.audioContext.createGain();
+                musicGain.gain.setValueAtTime(this.volumes.music, this.audioContext.currentTime);
+                musicGain.connect(this.musicGain);
+                
+                const music = {
+                    start: () => {
+                        this.playMusicLoop(musicGain);
+                    },
+                    stop: () => {
+                        musicGain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                    }
+                };
+                
+                return music;
+            }
+            
+            playMusicLoop(gainNode) {
+                const playNote = (frequency, duration, time) => {
+                    const oscillator = this.audioContext.createOscillator();
+                    const noteGain = this.audioContext.createGain();
+                    
+                    oscillator.frequency.setValueAtTime(frequency, time);
+                    oscillator.type = 'sine';
+                    
+                    noteGain.gain.setValueAtTime(0, time);
+                    noteGain.gain.linearRampToValueAtTime(0.1, time + 0.01);
+                    noteGain.gain.exponentialRampToValueAtTime(0.001, time + duration);
+                    
+                    oscillator.connect(noteGain);
+                    noteGain.connect(gainNode);
+                    
+                    oscillator.start(time);
+                    oscillator.stop(time + duration);
+                };
+                
+                const melody = [262, 330, 392, 523, 392, 330]; // C, E, G, C, G, E
+                const currentTime = this.audioContext.currentTime;
+                
+                melody.forEach((note, index) => {
+                    const time = currentTime + (index * 0.5);
+                    playNote(note, 0.4, time);
+                });
+                
+                // Loop da música
+                setTimeout(() => {
+                    if (!this.isMuted) {
+                        this.playMusicLoop(gainNode);
+                    }
+                }, melody.length * 500);
+            }
+            
+            updateVolumes() {
+                if (this.masterGain) {
+                    this.masterGain.gain.setValueAtTime(this.volumes.master, this.audioContext.currentTime);
+                    this.musicGain.gain.setValueAtTime(this.volumes.music, this.audioContext.currentTime);
+                    this.sfxGain.gain.setValueAtTime(this.volumes.sfx, this.audioContext.currentTime);
+                    this.engineGain.gain.setValueAtTime(this.volumes.engine, this.audioContext.currentTime);
+                }
+            }
+            
+            setVolume(type, value) {
+                this.volumes[type] = value / 100;
+                this.updateVolumes();
+            }
+            
+            toggleMute() {
+                this.isMuted = !this.isMuted;
+                if (this.isMuted) {
+                    this.backgroundMusic?.stop();
+                } else {
+                    this.startBackgroundMusic();
+                }
+                this.updateVolumes();
+            }
+            
+            createFallbackAudio() {
+                console.log('Usando sistema de áudio fallback');
+                // Implementar fallback com elementos <audio> se necessário
+            }
+            
+            setupEventListeners() {
+                // Volume controls serão configurados na classe Game
+            }
+        }
+
         class Game {
             constructor() {
                 this.canvas = document.getElementById('gameCanvas');
@@ -1113,9 +2669,21 @@
                 this.currentCheckpoint = 0;
                 this.checkpointProgress = 0;
                 
-                // Criar carro com física melhorada
-                this.player = new Car(400, 300);
+                // Criar carro do jogador
+                this.player = new Car(400, 300, this.audioManager);
+                this.player.carColor = '#ff4444';
+                this.player.name = 'Você';
+                this.player.isAI = false;
                 console.log('Carro criado:', this.player);
+                
+                // Criar carros IA (serão criados após a pista ser inicializada)
+                this.aiCars = [];
+                
+                // Sistema de Power-ups
+                this.powerUpManager = new PowerUpManager();
+                
+                // Sistema de Áudio
+                this.audioManager = new AudioManager();
                 
                 this.keys = {};
                 this.touchControls = {};
@@ -1163,6 +2731,15 @@
                 this.player.y = spawnPos.y;
                 this.player.angle = spawnPos.angle;
                 console.log('Carro posicionado em:', spawnPos);
+                
+                // Criar carros IA após a pista estar disponível
+                if (this.aiCars.length === 0) {
+                    this.createAICars();
+                }
+                
+                // Gerar power-ups na pista
+                this.powerUpManager.generatePowerUps(this.track);
+                console.log('Power-ups gerados:', this.powerUpManager.powerUps.length);
             }
             
             setupEventListeners() {
@@ -1237,6 +2814,45 @@
                 
                 document.getElementById('mainMenuBtn').addEventListener('click', () => {
                     this.quitToMainMenu();
+                });
+                
+                // Controles de Áudio
+                this.setupAudioControls();
+            }
+            
+            setupAudioControls() {
+                // Controles de volume
+                const musicVolume = document.getElementById('musicVolume');
+                const sfxVolume = document.getElementById('sfxVolume');
+                const engineVolume = document.getElementById('engineVolume');
+                const muteBtn = document.getElementById('muteBtn');
+                
+                // Volume da música
+                musicVolume.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    this.audioManager.setVolume('music', value);
+                    document.getElementById('musicVolumeValue').textContent = value + '%';
+                });
+                
+                // Volume dos efeitos sonoros
+                sfxVolume.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    this.audioManager.setVolume('sfx', value);
+                    document.getElementById('sfxVolumeValue').textContent = value + '%';
+                });
+                
+                // Volume do motor
+                engineVolume.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    this.audioManager.setVolume('engine', value);
+                    document.getElementById('sfxVolumeValue').textContent = value + '%';
+                });
+                
+                // Botão de mudo
+                muteBtn.addEventListener('click', () => {
+                    this.audioManager.toggleMute();
+                    muteBtn.textContent = this.audioManager.isMuted ? '🔊 Ativar' : '🔇 Mudo';
+                    muteBtn.classList.toggle('muted', this.audioManager.isMuted);
                 });
             }
             
@@ -1330,6 +2946,29 @@
                 // Limpar partículas
                 this.player.particles = [];
                 
+                // Reinicializar carros IA
+                this.aiCars.forEach((aiCar, index) => {
+                    const spawnPos = this.track.getSafeSpawnPosition();
+                    const offsetX = (index - 1) * 40;
+                    const offsetY = index * 30;
+                    
+                    aiCar.x = spawnPos.x + offsetX;
+                    aiCar.y = spawnPos.y + offsetY;
+                    aiCar.angle = spawnPos.angle;
+                    aiCar.velocity = { x: 0, y: 0 };
+                    aiCar.speed = 0;
+                    aiCar.acceleration = 0;
+                    aiCar.isDrifting = false;
+                    aiCar.particles = [];
+                    aiCar.currentLap = 1;
+                    aiCar.checkpointsPassed = 0;
+                    aiCar.raceProgress = 0;
+                    aiCar.lapTime = 0;
+                    
+                    // Gerar novos waypoints
+                    aiCar.generateWaypoints(this.track);
+                });
+                
                 // Esconder overlays
                 this.pauseOverlay.style.display = 'none';
                 this.gameOverScreen.style.display = 'none';
@@ -1339,8 +2978,168 @@
                 
                 this.updateUI();
                 
+                // Iniciar música de fundo
+                if (this.audioManager) {
+                    this.audioManager.startBackgroundMusic();
+                }
+                
                 console.log('Jogo iniciado com sucesso!');
                 console.log('Posição inicial do carro:', { x: this.player.x, y: this.player.y, angle: this.player.angle });
+            }
+            
+            createAICars() {
+                // Verificar se a pista está disponível
+                if (!this.track) {
+                    console.warn('Pista não disponível para criar carros IA');
+                    return;
+                }
+                
+                const aiConfigs = [
+                    { name: 'Speed', color: '#00ff00', difficulty: 'easy' },
+                    { name: 'Turbo', color: '#0088ff', difficulty: 'medium' },
+                    { name: 'Nitro', color: '#ff8800', difficulty: 'hard' }
+                ];
+                
+                for (let i = 0; i < aiConfigs.length; i++) {
+                    const config = aiConfigs[i];
+                    const spawnPos = this.track.getSafeSpawnPosition();
+                    
+                    // Posições ligeiramente diferentes para evitar sobreposição
+                    const offsetX = (i - 1) * 40;
+                    const offsetY = i * 30;
+                    
+                    const aiCar = new AICar(
+                        spawnPos.x + offsetX, 
+                        spawnPos.y + offsetY, 
+                        i, 
+                        config.color, 
+                        config.difficulty,
+                        this.audioManager
+                    );
+                    
+                    aiCar.name = config.name;
+                    aiCar.currentLap = 1;
+                    aiCar.checkpointsPassed = 0;
+                    
+                    this.aiCars.push(aiCar);
+                }
+                
+                console.log('Carros IA criados:', this.aiCars);
+            }
+            
+            getAllCars() {
+                return [this.player, ...this.aiCars];
+            }
+            
+            checkCarCollisions() {
+                const allCars = this.getAllCars();
+                const collisionRadius = 35;
+                
+                for (let i = 0; i < allCars.length; i++) {
+                    for (let j = i + 1; j < allCars.length; j++) {
+                        const car1 = allCars[i];
+                        const car2 = allCars[j];
+                        
+                        const dx = car1.x - car2.x;
+                        const dy = car1.y - car2.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < collisionRadius) {
+                            this.handleCarCollision(car1, car2, dx, dy, distance);
+                        }
+                    }
+                }
+            }
+            
+            handleCarCollision(car1, car2, dx, dy, distance) {
+                // Separar os carros
+                const overlap = 35 - distance;
+                const separationX = (dx / distance) * (overlap / 2);
+                const separationY = (dy / distance) * (overlap / 2);
+                
+                car1.x += separationX;
+                car1.y += separationY;
+                car2.x -= separationX;
+                car2.y -= separationY;
+                
+                // Aplicar impulso de colisão
+                const impactForce = 0.5;
+                const impactX = (dx / distance) * impactForce;
+                const impactY = (dy / distance) * impactForce;
+                
+                // Transferir momento
+                car1.velocity.x += impactX;
+                car1.velocity.y += impactY;
+                car2.velocity.x -= impactX;
+                car2.velocity.y -= impactY;
+                
+                // Reduzir velocidade dos carros na colisão
+                car1.speed *= 0.8;
+                car2.speed *= 0.8;
+                
+                // Efeito visual - fazer drift
+                if (car1.speed > 3) car1.isDrifting = true;
+                if (car2.speed > 3) car2.isDrifting = true;
+                
+                // Som de colisão
+                if (this.audioManager) {
+                    this.audioManager.playSoundEffect('collision');
+                }
+                
+                console.log(`Colisão entre ${car1.name || 'Carro'} e ${car2.name || 'Carro'}`);
+            }
+            
+            updateRanking() {
+                const allCars = this.getAllCars();
+                
+                // Calcular progresso de cada carro
+                allCars.forEach(car => {
+                    if (car.isAI) {
+                        car.updateRaceProgress(this.track);
+                    } else {
+                        // Progresso do jogador
+                        const progress = (this.currentCheckpoint / this.track.checkpoints.length) * 100;
+                        car.raceProgress = (this.lap - 1) * 100 + progress;
+                    }
+                });
+                
+                // Ordenar por progresso (maior progresso = melhor posição)
+                allCars.sort((a, b) => b.raceProgress - a.raceProgress);
+                
+                // Atualizar leaderboard
+                this.updateLeaderboard(allCars);
+                
+                return allCars;
+            }
+            
+            updateLeaderboard(rankedCars) {
+                const leaderboardItems = document.querySelectorAll('.leader-item');
+                
+                rankedCars.forEach((car, index) => {
+                    if (index < leaderboardItems.length) {
+                        const item = leaderboardItems[index];
+                        const position = item.querySelector('.position');
+                        const name = item.querySelector('.name');
+                        const time = item.querySelector('.time');
+                        
+                        position.textContent = `${index + 1}°`;
+                        name.textContent = car.name || `Carro ${index + 1}`;
+                        
+                        // Mostrar tempo da volta atual ou melhor tempo
+                        if (car.lapTime > 0) {
+                            time.textContent = this.formatTime(car.lapTime);
+                        } else {
+                            time.textContent = '--:--';
+                        }
+                        
+                        // Destacar o jogador
+                        if (!car.isAI) {
+                            item.classList.add('current-player');
+                        } else {
+                            item.classList.remove('current-player');
+                        }
+                    }
+                });
             }
             
             updatePlayer() {
@@ -1551,32 +3350,39 @@
                     }
                 }
                 
-                // Desenhar posição do carro no mini-mapa (só se estiver em posição válida)
-                if (this.player && !isNaN(this.player.x) && !isNaN(this.player.y)) {
-                    const carX = this.player.x * scaleX;
-                    const carY = this.player.y * scaleY;
-                    
-                    // Verificar se a posição está dentro dos limites do mini-mapa
-                    if (carX >= 0 && carX <= canvas.width && carY >= 0 && carY <= canvas.height) {
-                        ctx.fillStyle = '#ff0000';
-                        ctx.globalAlpha = 1.0;
-                        ctx.beginPath();
-                        ctx.arc(carX, carY, 4, 0, 2 * Math.PI);
-                        ctx.fill();
+                // Desenhar todos os carros no mini-mapa
+                const allCars = this.getAllCars();
+                allCars.forEach(car => {
+                    if (car && !isNaN(car.x) && !isNaN(car.y)) {
+                        const carX = car.x * scaleX;
+                        const carY = car.y * scaleY;
                         
-                        // Desenhar direção do carro (pequena linha)
-                        const directionLength = 8;
-                        const endX = carX + Math.cos(this.player.angle) * directionLength;
-                        const endY = carY + Math.sin(this.player.angle) * directionLength;
-                        
-                        ctx.strokeStyle = '#ffffff';
-                        ctx.lineWidth = 2;
-                        ctx.beginPath();
-                        ctx.moveTo(carX, carY);
-                        ctx.lineTo(endX, endY);
-                        ctx.stroke();
+                        // Verificar se a posição está dentro dos limites do mini-mapa
+                        if (carX >= 0 && carX <= canvas.width && carY >= 0 && carY <= canvas.height) {
+                            // Cor baseada no tipo de carro
+                            ctx.fillStyle = car.carColor || '#ff0000';
+                            ctx.globalAlpha = 1.0;
+                            ctx.beginPath();
+                            
+                            // Jogador fica maior no mini-mapa
+                            const radius = car.isAI ? 3 : 4;
+                            ctx.arc(carX, carY, radius, 0, 2 * Math.PI);
+                            ctx.fill();
+                            
+                            // Desenhar direção do carro (pequena linha)
+                            const directionLength = car.isAI ? 6 : 8;
+                            const endX = carX + Math.cos(car.angle) * directionLength;
+                            const endY = carY + Math.sin(car.angle) * directionLength;
+                            
+                            ctx.strokeStyle = '#ffffff';
+                            ctx.lineWidth = car.isAI ? 1 : 2;
+                            ctx.beginPath();
+                            ctx.moveTo(carX, carY);
+                            ctx.lineTo(endX, endY);
+                            ctx.stroke();
+                        }
                     }
-                }
+                });
                 
                 // Resetar transparência
                 ctx.globalAlpha = 1.0;
@@ -1592,10 +3398,24 @@
                     }
                     this.lastTime = currentTime;
                     
+                    // Atualizar jogador
                     this.updatePlayer();
                     
+                    // Atualizar carros IA
+                    this.updateAICars();
+                    
+                    // Verificar colisões entre carros
+                    this.checkCarCollisions();
+                    
+                    // Atualizar sistema de power-ups
+                    const deltaTimeMs = this.lastTime > 0 ? (currentTime - this.lastTime) : 0;
+                    this.powerUpManager.update(deltaTimeMs);
+                    this.powerUpManager.checkCollisions(this.getAllCars());
+                    
+                    // Atualizar ranking
+                    this.updateRanking();
+                    
                     // Atualizar partículas do carro (usar deltaTime em milissegundos)
-                    const deltaTimeMs = this.lastTime > 0 ? (currentTime - this.lastTime) * 1000 : 0;
                     this.player.updateParticles(deltaTimeMs);
                     
                     this.updateUI();
@@ -1606,6 +3426,47 @@
                         this.lastTime = performance.now();
                     }
                 }
+            }
+            
+            updateAICars() {
+                // Verificar se há carros IA para atualizar
+                if (this.aiCars.length === 0) {
+                    return;
+                }
+                
+                const currentTime = performance.now();
+                const deltaTime = this.lastTime > 0 ? (currentTime - this.lastTime) / 1000 : 0;
+                const allCars = this.getAllCars();
+                
+                this.aiCars.forEach(aiCar => {
+                    // Verificar se o carro IA é válido
+                    if (!aiCar || !this.track) {
+                        return;
+                    }
+                    
+                    try {
+                        // Atualizar IA
+                        aiCar.updateAI(deltaTime, this.track, allCars);
+                        
+                        // Verificar checkpoints para IA
+                        if (this.track.checkCheckpoint(aiCar, aiCar.checkpointsPassed)) {
+                            aiCar.checkpointsPassed++;
+                            
+                            // Verificar se completou a volta
+                            if (aiCar.checkpointsPassed >= this.track.checkpoints.length) {
+                                aiCar.currentLap++;
+                                aiCar.checkpointsPassed = 0;
+                                
+                                // Verificar se completou todas as voltas
+                                if (aiCar.currentLap > this.maxLaps) {
+                                    console.log(`${aiCar.name} completou a corrida!`);
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error(`Erro ao atualizar carro IA ${aiCar.name}:`, error);
+                    }
+                });
             }
 
             updatePlayer() {
@@ -1724,8 +3585,16 @@
                     this.track.render(this.ctx);
                 }
                 
-                // Desenhar carro usando a classe Car
+                // Desenhar todos os carros (IA primeiro, depois jogador para ficar por cima)
+                this.aiCars.forEach(aiCar => {
+                    aiCar.render(this.ctx);
+                });
+                
+                // Desenhar carro do jogador
                 this.player.render(this.ctx);
+                
+                // Desenhar power-ups e manchas de óleo
+                this.powerUpManager.render(this.ctx);
                 
                 // Desenhar elementos da pista
                 this.drawTrackElements();
