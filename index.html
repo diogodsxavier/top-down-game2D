@@ -46,14 +46,319 @@
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
             z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .ui-item {
-            margin-bottom: 10px;
-            padding: 8px 15px;
-            background: rgba(0,0,0,0.7);
-            border-radius: 20px;
-            border: 2px solid #fff;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6));
+            border-radius: 25px;
+            border: 2px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .ui-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.6);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+
+        .speedometer {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border: 3px solid #00ff88;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .speed-value {
+            font-size: 24px;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
+            transition: all 0.3s ease;
+        }
+
+        .lap-indicator {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border: 3px solid #ff6b35;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .lap-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b35, #ff8c42);
+            transition: width 0.5s ease;
+        }
+
+        .lap-value {
+            font-size: 20px;
+            color: #ff6b35;
+            text-shadow: 0 0 8px #ff6b35;
+        }
+
+        .timer {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border: 3px solid #4ecdc4;
+            position: relative;
+        }
+
+        .timer-value {
+            font-size: 20px;
+            color: #4ecdc4;
+            text-shadow: 0 0 8px #4ecdc4;
+        }
+
+        .checkpoint-indicator {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border: 3px solid #ffd93d;
+            position: relative;
+        }
+
+        .checkpoint-value {
+            font-size: 18px;
+            color: #ffd93d;
+            text-shadow: 0 0 8px #ffd93d;
+        }
+
+        #miniMap {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 200px;
+            height: 150px;
+            background: rgba(0,0,0,0.8);
+            border: 3px solid #fff;
+            border-radius: 15px;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        #miniMapCanvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+
+        #gameControls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .game-btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .game-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .game-btn.primary {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .game-btn.secondary {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            color: white;
+        }
+
+        .game-btn.danger {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+        }
+
+        #pauseOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 30;
+            backdrop-filter: blur(5px);
+        }
+
+        #pauseMenu {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            padding: 40px;
+            border-radius: 25px;
+            border: 3px solid #fff;
+            text-align: center;
+            color: white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        #pauseMenu h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #4ecdc4;
+            text-shadow: 0 0 20px #4ecdc4;
+        }
+
+        #gameOverScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(0,0,0,0.7));
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 40;
+            backdrop-filter: blur(10px);
+        }
+
+        #gameOverContent {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            padding: 50px;
+            border-radius: 30px;
+            border: 3px solid #ff6b35;
+            text-align: center;
+            color: white;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.6);
+            max-width: 500px;
+        }
+
+        #gameOverContent h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #ff6b35;
+            text-shadow: 0 0 25px #ff6b35;
+        }
+
+        #gameOverContent h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #4ecdc4;
+        }
+
+        .final-time {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #00ff88;
+            text-shadow: 0 0 15px #00ff88;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff6b35;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.8;
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+        }
+
+        .particle-trail {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, #ff6b35, transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 4;
+            opacity: 0.6;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            from {
+                opacity: 0.6;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+        }
+
+        .ui-glow {
+            animation: uiGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes uiGlow {
+            from {
+                box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            }
+            to {
+                box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.1);
+            }
+        }
+
+        .speed-glow {
+            animation: speedGlow 0.5s ease-out;
+        }
+
+        @keyframes speedGlow {
+            0% {
+                text-shadow: 0 0 10px #00ff88;
+            }
+            50% {
+                text-shadow: 0 0 20px #00ff88, 0 0 30px #00ff88;
+            }
+            100% {
+                text-shadow: 0 0 10px #00ff88;
+            }
+        }
+
+        .lap-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b35, #ff8c42, #ff6b35);
+            background-size: 200% 100%;
+            animation: progressFlow 2s linear infinite;
+            transition: width 0.5s ease;
+            border-radius: 0 0 25px 25px;
+        }
+
+        @keyframes progressFlow {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 200% 0%;
+            }
         }
 
         #mobileControls {
@@ -195,10 +500,32 @@
         <canvas id="gameCanvas"></canvas>
         
         <div id="ui">
-            <div class="ui-item">Velocidade: <span id="speed">0</span> km/h</div>
-            <div class="ui-item">Volta: <span id="lap">1</span>/3</div>
-            <div class="ui-item">Tempo: <span id="time">00:00</span></div>
-            <div class="ui-item">Checkpoint: <span id="checkpoint">1</span>/4</div>
+            <div class="ui-item speedometer">
+                <div>Velocímetro</div>
+                <div class="speed-value"><span id="speed">0</span> km/h</div>
+            </div>
+            <div class="ui-item lap-indicator">
+                <div>Volta Atual</div>
+                <div class="lap-value"><span id="lap">1</span>/3</div>
+                <div class="lap-progress" id="lapProgress"></div>
+            </div>
+            <div class="ui-item timer">
+                <div>Tempo</div>
+                <div class="timer-value"><span id="time">00:00</span></div>
+            </div>
+            <div class="ui-item checkpoint-indicator">
+                <div>Checkpoint</div>
+                <div class="checkpoint-value"><span id="checkpoint">1</span>/4</div>
+            </div>
+        </div>
+
+        <div id="miniMap">
+            <canvas id="miniMapCanvas"></canvas>
+        </div>
+
+        <div id="gameControls">
+            <button class="game-btn secondary" id="pauseBtn">⏸️ Pausar</button>
+            <button class="game-btn danger" id="restartBtn">🔄 Reiniciar</button>
         </div>
 
         <div id="mobileControls">
@@ -218,6 +545,24 @@
             <p>No mobile, use os botões touch</p>
             <button id="startBtn">Iniciar Jogo</button>
         </div>
+
+        <div id="pauseOverlay">
+            <div id="pauseMenu">
+                <h2>⏸️ Jogo Pausado</h2>
+                <button class="game-btn primary" id="resumeBtn">▶️ Continuar</button>
+                <button class="game-btn danger" id="quitBtn">🚪 Sair</button>
+            </div>
+        </div>
+
+        <div id="gameOverScreen">
+            <div id="gameOverContent">
+                <h1>🏆 Parabéns!</h1>
+                <h2>Você completou todas as voltas!</h2>
+                <div class="final-time">Tempo Final: <span id="finalTime">00:00</span></div>
+                <button class="game-btn primary" id="playAgainBtn">🎮 Jogar Novamente</button>
+                <button class="game-btn secondary" id="mainMenuBtn">🏠 Menu Principal</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -236,22 +581,31 @@
                 this.height = 50;
                 this.mass = 1000;
                 
+                // Sistema de partículas
+                this.particles = [];
+                this.particleTimer = 0;
+                this.lastParticleTime = 0;
+                
                 // Constantes físicas
-                this.maxSpeed = 8;
-                this.maxAcceleration = 0.4;
-                this.maxDeceleration = 0.6;
-                this.friction = 0.98;
-                this.airResistance = 0.995;
-                this.turnSpeed = 0.08;
-                this.driftFactor = 0.3;
+                this.maxSpeed = 15;
+                this.maxAcceleration = 2.0;
+                this.maxDeceleration = 1.5;
+                this.friction = 0.95;
+                this.airResistance = 0.99;
+                this.turnSpeed = 0.15;
+                this.driftFactor = 0.25;
                 
                 // Estados
                 this.isDrifting = false;
                 this.driftAngle = 0;
                 this.lastTurnDirection = 0;
+                
+                // Sistema de partículas
+                this.particles = [];
+                this.lastParticleTime = 0;
             }
             
-            update(input, deltaTime) {
+            update(deltaTime, input, track) {
                 // Processar entrada
                 this.processInput(input);
                 
@@ -262,22 +616,12 @@
                 this.x += this.velocity.x;
                 this.y += this.velocity.y;
                 
-                // Aplicar atrito
-                this.velocity.x *= this.friction;
-                this.velocity.y *= this.friction;
-                
                 // Aplicar resistência do ar
                 this.speed *= this.airResistance;
                 
-                // Calcular velocidade total
-                this.speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
-                
-                // Limitar velocidade máxima
-                if (this.speed > this.maxSpeed) {
-                    const ratio = this.maxSpeed / this.speed;
-                    this.velocity.x *= ratio;
-                    this.velocity.y *= ratio;
-                    this.speed = this.maxSpeed;
+                // Verificar colisão com bordas da pista
+                if (track) {
+                    this.checkBounds(track.canvasWidth, track.canvasHeight);
                 }
                 
                 // Proteção contra estados inconsistentes
@@ -291,71 +635,148 @@
                     this.acceleration = 0;
                     this.isDrifting = false;
                 }
+                
+                // Atualizar partículas
+                this.updateParticles(deltaTime);
+            }
+            
+            // Sistema de partículas
+            createParticle() {
+                const currentTime = performance.now();
+                if (currentTime - this.lastParticleTime > 50) { // Criar partícula a cada 50ms
+                    const particle = {
+                        x: this.x - Math.sin(this.angle) * (this.height / 2 + 5),
+                        y: this.y + Math.cos(this.angle) * (this.height / 2 + 5),
+                        vx: (Math.random() - 0.5) * 2,
+                        vy: (Math.random() - 0.5) * 2,
+                        life: 1.0,
+                        decay: 0.02,
+                        size: Math.random() * 3 + 2,
+                        color: this.getParticleColor()
+                    };
+                    this.particles.push(particle);
+                    this.lastParticleTime = currentTime;
+                }
+            }
+            
+            getParticleColor() {
+                // Cor baseada na velocidade e aceleração
+                if (this.speed > 6) {
+                    return `hsl(${Math.random() * 20 + 15}, 100%, 60%)`; // Laranja/vermelho para alta velocidade
+                } else if (this.speed > 3) {
+                    return `hsl(${Math.random() * 30 + 25}, 100%, 65%)`; // Amarelo/laranja para velocidade média
+                } else {
+                    return `hsl(${Math.random() * 40 + 35}, 100%, 70%)`; // Amarelo para baixa velocidade
+                }
+            }
+            
+            updateParticles(deltaTime) {
+                // Criar partículas quando acelerando
+                if (this.acceleration > 0.1 && this.speed > 1) {
+                    this.createParticle();
+                }
+                
+                // Atualizar partículas existentes
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    const particle = this.particles[i];
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    particle.life -= particle.decay;
+                    particle.size *= 0.98;
+                    
+                    // Remover partículas mortas
+                    if (particle.life <= 0 || particle.size < 0.5) {
+                        this.particles.splice(i, 1);
+                    }
+                }
+            }
+            
+            renderParticles(ctx) {
+                ctx.save();
+                for (const particle of this.particles) {
+                    ctx.globalAlpha = particle.life;
+                    ctx.fillStyle = particle.color;
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Adicionar brilho para partículas de alta velocidade
+                    if (this.speed > 6) {
+                        ctx.globalAlpha = particle.life * 0.5;
+                        ctx.fillStyle = '#ffffff';
+                        ctx.beginPath();
+                        ctx.arc(particle.x, particle.y, particle.size * 0.5, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+                ctx.restore();
             }
             
             applyPhysics(deltaTime) {
-                // Normalizar delta time para física consistente
-                const normalizedDelta = Math.min(deltaTime, 2.0);
+                // Debug: mostrar valores de física
+                if (this.acceleration !== 0) {
+                    console.log('Aplicando física - Aceleração:', this.acceleration, 'DeltaTime:', deltaTime);
+                }
+                
+                // Normalizar delta time para física consistente (mínimo 16ms para ~60 FPS)
+                const normalizedDelta = Math.max(deltaTime, 0.016);
                 
                 // Aplicar aceleração com delta time
                 this.velocity.x += Math.sin(this.angle) * this.acceleration * normalizedDelta;
                 this.velocity.y -= Math.cos(this.angle) * this.acceleration * normalizedDelta;
                 
-                // Aplicar inércia nas curvas (reduzida para evitar tremulação)
-                if (Math.abs(this.velocity.x) > 0.1 || Math.abs(this.velocity.y) > 0.1) {
-                    const currentAngle = Math.atan2(this.velocity.y, this.velocity.x);
-                    const angleDiff = this.angle - currentAngle;
-                    
-                    // Aplicar correção de inércia mais suave
-                    if (Math.abs(angleDiff) > 0.1) {
-                        const correction = angleDiff * 0.05 * normalizedDelta; // Reduzido de 0.1 para 0.05
-                        this.velocity.x += Math.cos(currentAngle) * correction;
-                        this.velocity.y += Math.sin(currentAngle) * correction;
-                    }
+                // Aplicar atrito
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                
+                // Calcular velocidade total
+                this.speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
+                
+                // Limitar velocidade máxima
+                if (this.speed > this.maxSpeed) {
+                    const ratio = this.maxSpeed / this.speed;
+                    this.velocity.x *= ratio;
+                    this.velocity.y *= ratio;
+                    this.speed = this.maxSpeed;
                 }
                 
                 // Estabilizar velocidades muito baixas para evitar tremulação
                 if (Math.abs(this.velocity.x) < 0.01) this.velocity.x = 0;
                 if (Math.abs(this.velocity.y) < 0.01) this.velocity.y = 0;
+                
+                // Debug: mostrar velocidade resultante
+                if (this.speed > 0.1) {
+                    console.log('Velocidade atual:', this.speed.toFixed(2), 'Posição:', { x: this.x.toFixed(2), y: this.y.toFixed(2) });
+                }
             }
             
             processInput(input) {
-                // Aceleração - Lógica melhorada para evitar conflitos
+                // Debug: mostrar input recebido
+                if (input.forward || input.backward || input.left || input.right) {
+                    console.log('Input recebido:', input);
+                }
+                
+                // Aceleração - Lógica simplificada
                 if (input.forward && !input.backward) {
                     // Acelerar para frente
-                    if (this.acceleration < 0) {
-                        // Se estava indo para trás, frear primeiro
-                        this.acceleration = Math.min(0, this.acceleration + 0.15);
-                    } else {
-                        // Acelerar normalmente
-                        this.acceleration = Math.min(this.acceleration + 0.1, this.maxAcceleration);
-                    }
+                    this.acceleration = this.maxAcceleration;
+                    console.log('Acelerando para frente:', this.acceleration);
                 } else if (input.backward && !input.forward) {
                     // Acelerar para trás
-                    if (this.acceleration > 0) {
-                        // Se estava indo para frente, frear primeiro
-                        this.acceleration = Math.max(0, this.acceleration - 0.15);
-                    } else {
-                        // Acelerar para trás
-                        this.acceleration = Math.max(this.acceleration - 0.1, -this.maxDeceleration);
-                    }
+                    this.acceleration = -this.maxDeceleration;
+                    console.log('Acelerando para trás:', this.acceleration);
                 } else {
                     // Nenhuma tecla pressionada - desaceleração natural
-                    if (this.acceleration > 0) {
-                        this.acceleration = Math.max(0, this.acceleration - 0.08);
-                    } else if (this.acceleration < 0) {
-                        this.acceleration = Math.min(0, this.acceleration + 0.08);
-                    }
+                    this.acceleration = 0;
                 }
                 
                 // Direção
                 if (input.left) {
                     this.turn(-1);
+                    console.log('Virando para esquerda');
                 } else if (input.right) {
                     this.turn(1);
-                } else {
-                    // Retorno gradual da direção
-                    this.driftAngle *= 0.95;
+                    console.log('Virando para direita');
                 }
             }
             
@@ -414,6 +835,80 @@
                 }
                 
                 ctx.restore();
+                
+                // Renderizar partículas
+                this.renderParticles(ctx);
+            }
+
+            // Sistema de partículas
+            createParticle(x, y, type = 'normal') {
+                const particle = {
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: (Math.random() - 0.5) * 2,
+                    life: 1.0,
+                    maxLife: type === 'trail' ? 0.8 : 0.5,
+                    type: type,
+                    size: type === 'trail' ? 3 : 4
+                };
+                this.particles.push(particle);
+            }
+
+            updateParticles(deltaTime) {
+                // Atualizar partículas existentes
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    const particle = this.particles[i];
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    particle.life -= deltaTime / 1000;
+                    
+                    // Remover partículas mortas
+                    if (particle.life <= 0) {
+                        this.particles.splice(i, 1);
+                    }
+                }
+
+                // Criar novas partículas quando acelerando
+                if (this.acceleration > 0.1 && this.speed > 2) {
+                    this.particleTimer += deltaTime;
+                    if (this.particleTimer - this.lastParticleTime > 50) { // 50ms entre partículas
+                        // Partículas principais atrás do carro
+                        const backX = this.x - Math.cos(this.angle) * (this.height/2 + 5);
+                        const backY = this.y - Math.sin(this.angle) * (this.height/2 + 5);
+                        this.createParticle(backX, backY, 'normal');
+                        
+                        // Partículas de trilha nas laterais
+                        const leftX = this.x - Math.cos(this.angle + Math.PI/2) * (this.width/2 + 2);
+                        const leftY = this.y - Math.sin(this.angle + Math.PI/2) * (this.width/2 + 2);
+                        const rightX = this.x + Math.cos(this.angle + Math.PI/2) * (this.width/2 + 2);
+                        const rightY = this.y + Math.sin(this.angle + Math.PI/2) * (this.width/2 + 2);
+                        
+                        this.createParticle(leftX, leftY, 'trail');
+                        this.createParticle(rightX, rightY, 'trail');
+                        
+                        this.lastParticleTime = this.particleTimer;
+                    }
+                }
+            }
+
+            renderParticles(ctx) {
+                this.particles.forEach(particle => {
+                    ctx.save();
+                    ctx.globalAlpha = particle.life;
+                    
+                    if (particle.type === 'trail') {
+                        ctx.fillStyle = '#ff8c42';
+                        ctx.fillRect(particle.x - particle.size/2, particle.y - particle.size/2, particle.size, particle.size);
+                    } else {
+                        ctx.fillStyle = '#ff6b35';
+                        ctx.beginPath();
+                        ctx.arc(particle.x, particle.y, particle.size, 0, 2 * Math.PI);
+                        ctx.fill();
+                    }
+                    
+                    ctx.restore();
+                });
             }
             
             // Verificar colisão com bordas
@@ -460,10 +955,10 @@
                 // Dimensões da pista oval
                 this.centerX = canvasWidth / 2;
                 this.centerY = canvasHeight / 2;
-                this.outerRadiusX = Math.min(canvasWidth, canvasHeight) * 0.35;
-                this.outerRadiusY = Math.min(canvasWidth, canvasHeight) * 0.25;
-                this.innerRadiusX = this.outerRadiusX - 80;
-                this.innerRadiusY = this.outerRadiusY - 80;
+                this.outerRadiusX = Math.max(50, Math.min(canvasWidth, canvasHeight) * 0.35);
+                this.outerRadiusY = Math.max(50, Math.min(canvasWidth, canvasHeight) * 0.25);
+                this.innerRadiusX = Math.max(20, this.outerRadiusX - 80);
+                this.innerRadiusY = Math.max(20, this.outerRadiusY - 80);
                 
                 // Checkpoints para contagem de voltas
                 this.checkpoints = [
@@ -496,34 +991,29 @@
                 const dx = x - this.centerX;
                 const dy = y - this.centerY;
                 
-                // Verificar se está dentro da elipse externa
+                // Verificar se está dentro da elipse externa (com margem de tolerância)
                 const outerCheck = (dx * dx) / (this.outerRadiusX * this.outerRadiusX) + 
                                  (dy * dy) / (this.outerRadiusY * this.outerRadiusY);
                 
-                // Verificar se está fora da elipse interna
+                // Verificar se está fora da elipse interna (com margem de tolerância)
                 const innerCheck = (dx * dx) / (this.innerRadiusX * this.innerRadiusX) + 
                                  (dy * dy) / (this.innerRadiusY * this.innerRadiusY);
                 
-                return outerCheck <= 1 && innerCheck >= 1;
+                // Margem de tolerância maior para evitar colisões desnecessárias
+                return outerCheck <= 1.1 && innerCheck >= 0.9;
             }
             
             // Verificar colisão com bordas da pista
             checkTrackCollision(car) {
                 const margin = Math.max(car.width, car.height) / 2;
                 
-                // Verificar 4 pontos do carro (cantos)
-                const carPoints = [
-                    { x: car.x + margin * Math.cos(car.angle - Math.PI/4), y: car.y + margin * Math.sin(car.angle - Math.PI/4) },
-                    { x: car.x + margin * Math.cos(car.angle + Math.PI/4), y: car.y + margin * Math.sin(car.angle + Math.PI/4) },
-                    { x: car.x + margin * Math.cos(car.angle + 3*Math.PI/4), y: car.y + margin * Math.sin(car.angle + 3*Math.PI/4) },
-                    { x: car.x + margin * Math.cos(car.angle - 3*Math.PI/4), y: car.y + margin * Math.sin(car.angle - 3*Math.PI/4) }
-                ];
+                // Verificar apenas o centro do carro para ser menos restritivo
+                const centerX = car.x;
+                const centerY = car.y;
                 
-                // Se qualquer ponto estiver fora da pista, há colisão
-                for (let point of carPoints) {
-                    if (!this.isPointOnTrack(point.x, point.y)) {
-                        return true;
-                    }
+                // Se o centro do carro estiver fora da pista, há colisão
+                if (!this.isPointOnTrack(centerX, centerY)) {
+                    return true;
                 }
                 
                 return false;
@@ -605,7 +1095,14 @@
                 this.startScreen = document.getElementById('startScreen');
                 this.startBtn = document.getElementById('startBtn');
                 
+                // Elementos da UI
+                this.pauseOverlay = document.getElementById('pauseOverlay');
+                this.gameOverScreen = document.getElementById('gameOverScreen');
+                this.miniMapCanvas = document.getElementById('miniMapCanvas');
+                this.miniMapCtx = null;
+                
                 this.gameRunning = false;
+                this.gamePaused = false;
                 this.gameTime = 0;
                 this.lap = 1;
                 this.maxLaps = 3;
@@ -618,6 +1115,7 @@
                 
                 // Criar carro com física melhorada
                 this.player = new Car(400, 300);
+                console.log('Carro criado:', this.player);
                 
                 this.keys = {};
                 this.touchControls = {};
@@ -635,7 +1133,16 @@
                 this.resizeCanvas();
                 this.setupEventListeners();
                 this.setupTouchControls();
-                this.gameLoop();
+                this.setupMiniMap();
+                // Não iniciar o gameLoop até o jogo começar
+            }
+            
+            setupMiniMap() {
+                if (this.miniMapCanvas) {
+                    this.miniMapCtx = this.miniMapCanvas.getContext('2d');
+                    this.miniMapCanvas.width = 200;
+                    this.miniMapCanvas.height = 150;
+                }
             }
             
             resizeCanvas() {
@@ -648,17 +1155,46 @@
                 
                 // Criar ou atualizar a pista
                 this.track = new Track(maxWidth, maxHeight);
+                console.log('Pista criada:', this.track);
                 
                 // Posicionar o carro na posição segura da pista
                 const spawnPos = this.track.getSafeSpawnPosition();
                 this.player.x = spawnPos.x;
                 this.player.y = spawnPos.y;
                 this.player.angle = spawnPos.angle;
+                console.log('Carro posicionado em:', spawnPos);
             }
             
             setupEventListeners() {
                 // Controles de teclado
                 window.addEventListener('keydown', (e) => {
+                    // Sistema de debug (F1 para mostrar checkpoints, F2 para debug de movimento, ESC para pausar)
+                    if (e.key === 'F1') {
+                        e.preventDefault();
+                        window.debugMode = !window.debugMode;
+                        console.log('Debug mode:', window.debugMode ? 'ON' : 'OFF');
+                        return;
+                    }
+                    if (e.key === 'F2') {
+                        e.preventDefault();
+                        console.log('Debug do carro:', {
+                            x: this.player.x,
+                            y: this.player.y,
+                            angle: this.player.angle,
+                            velocity: this.player.velocity,
+                            speed: this.player.speed,
+                            acceleration: this.player.acceleration,
+                            input: this.input
+                        });
+                        return;
+                    }
+                    if (e.key === 'Escape') {
+                        e.preventDefault();
+                        this.togglePause();
+                        return;
+                    }
+                    
+                    // Controles de movimento
                     this.keys[e.key.toLowerCase()] = true;
                     this.updateInput();
                 });
@@ -678,13 +1214,29 @@
                     this.startGame();
                 });
                 
-                // Sistema de debug (F1 para mostrar checkpoints)
-                window.addEventListener('keydown', (e) => {
-                    if (e.key === 'F1') {
-                        e.preventDefault();
-                        window.debugMode = !window.debugMode;
-                        console.log('Debug mode:', window.debugMode ? 'ON' : 'OFF');
-                    }
+                // Botões de controle do jogo
+                document.getElementById('pauseBtn').addEventListener('click', () => {
+                    this.togglePause();
+                });
+                
+                document.getElementById('restartBtn').addEventListener('click', () => {
+                    this.restartGame();
+                });
+                
+                document.getElementById('resumeBtn').addEventListener('click', () => {
+                    this.togglePause();
+                });
+                
+                document.getElementById('quitBtn').addEventListener('click', () => {
+                    this.quitToMainMenu();
+                });
+                
+                document.getElementById('playAgainBtn').addEventListener('click', () => {
+                    this.restartGame();
+                });
+                
+                document.getElementById('mainMenuBtn').addEventListener('click', () => {
+                    this.quitToMainMenu();
                 });
             }
             
@@ -693,6 +1245,12 @@
                 this.input.backward = this.keys['s'] || this.keys['arrowdown'] || this.touchControls.down;
                 this.input.left = this.keys['a'] || this.keys['arrowleft'] || this.touchControls.left;
                 this.input.right = this.keys['d'] || this.keys['arrowright'] || this.touchControls.right;
+                
+                // Debug: mostrar estado das teclas
+                if (this.input.forward || this.input.backward || this.input.left || this.input.right) {
+                    console.log('Estado das teclas:', this.keys);
+                    console.log('Input processado:', this.input);
+                }
             }
             
             setupTouchControls() {
@@ -748,7 +1306,9 @@
             }
             
             startGame() {
+                console.log('Iniciando jogo...');
                 this.gameRunning = true;
+                this.gamePaused = false;
                 this.startScreen.classList.add('hidden');
                 this.gameTime = 0;
                 this.lap = 1;
@@ -767,7 +1327,20 @@
                 this.player.acceleration = 0;
                 this.player.isDrifting = false;
                 
+                // Limpar partículas
+                this.player.particles = [];
+                
+                // Esconder overlays
+                this.pauseOverlay.style.display = 'none';
+                this.gameOverScreen.style.display = 'none';
+                
+                // Iniciar o game loop
+                this.gameLoop();
+                
                 this.updateUI();
+                
+                console.log('Jogo iniciado com sucesso!');
+                console.log('Posição inicial do carro:', { x: this.player.x, y: this.player.y, angle: this.player.angle });
             }
             
             updatePlayer() {
@@ -800,6 +1373,9 @@
                 this.player.speed = 0;
                 this.player.acceleration = 0;
                 this.player.isDrifting = false;
+                
+                // Limpar partículas ao colidir
+                this.player.particles = [];
                 
                 // Penalidade: voltar ao checkpoint anterior
                 if (this.currentCheckpoint > 0) {
@@ -835,40 +1411,307 @@
             
             gameWon() {
                 this.gameRunning = false;
+                this.showGameOver();
                 console.log('Parabéns! Você completou todas as voltas!');
-                // Aqui você pode adicionar uma tela de vitória
+            }
+            
+            togglePause() {
+                if (this.gameRunning) {
+                    this.gamePaused = !this.gamePaused;
+                    if (this.gamePaused) {
+                        this.pauseOverlay.style.display = 'flex';
+                    } else {
+                        this.pauseOverlay.style.display = 'none';
+                    }
+                }
+            }
+            
+            restartGame() {
+                this.gamePaused = false;
+                this.pauseOverlay.style.display = 'none';
+                this.gameOverScreen.style.display = 'none';
+                this.startGame();
+            }
+            
+            quitToMainMenu() {
+                this.gamePaused = false;
+                this.gameRunning = false;
+                this.pauseOverlay.style.display = 'none';
+                this.gameOverScreen.style.display = 'none';
+                this.startScreen.classList.remove('hidden');
+                this.gameTime = 0;
+                this.lap = 1;
+                this.currentCheckpoint = 0;
+                this.checkpointProgress = 0;
+            }
+
+            showGameOver() {
+                document.getElementById('finalTime').textContent = this.formatTime(this.gameTime);
+                this.gameOverScreen.style.display = 'flex';
+            }
+
+            formatTime(time) {
+                const minutes = Math.floor(time / 60);
+                const seconds = Math.floor(time % 60);
+                return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            updateMiniMap() {
+                if (!this.miniMapCtx || !this.track || !this.canvas) return;
+                
+                const ctx = this.miniMapCtx;
+                const canvas = this.miniMapCanvas;
+                
+                // Verificar se as dimensões são válidas
+                if (canvas.width <= 0 || canvas.height <= 0 || this.canvas.width <= 0 || this.canvas.height <= 0) {
+                    console.warn('Dimensões inválidas do canvas, pulando atualização do mini-mapa');
+                    return;
+                }
+                
+                // Limpar mini-mapa
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Desenhar fundo
+                ctx.fillStyle = '#2d5a27';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Escala do mini-mapa
+                const scaleX = canvas.width / this.canvas.width;
+                const scaleY = canvas.height / this.canvas.height;
+                
+                // Validar raios antes de desenhar
+                const outerRadiusX = Math.max(0, this.track.outerRadiusX * scaleX);
+                const outerRadiusY = Math.max(0, this.track.outerRadiusY * scaleY);
+                const innerRadiusX = Math.max(0, this.track.innerRadiusX * scaleX);
+                const innerRadiusY = Math.max(0, this.track.innerRadiusY * scaleY);
+                
+                // Só desenhar se os raios forem válidos
+                if (outerRadiusX > 0 && outerRadiusY > 0) {
+                    // Desenhar pista no mini-mapa
+                    ctx.fillStyle = '#8B4513';
+                    ctx.beginPath();
+                    ctx.ellipse(
+                        this.track.centerX * scaleX, 
+                        this.track.centerY * scaleY, 
+                        outerRadiusX, 
+                        outerRadiusY, 
+                        0, 0, 2 * Math.PI
+                    );
+                    ctx.fill();
+                    
+                    // Cortar o centro da pista (só se o raio interno for válido)
+                    if (innerRadiusX > 0 && innerRadiusY > 0) {
+                        ctx.fillStyle = '#2d5a27';
+                        ctx.beginPath();
+                        ctx.ellipse(
+                            this.track.centerX * scaleX, 
+                            this.track.centerY * scaleY, 
+                            innerRadiusX, 
+                            innerRadiusY, 
+                            0, 0, 2 * Math.PI
+                        );
+                        ctx.fill();
+                    }
+                }
+                
+                // Desenhar linha de chegada (só se for válida)
+                if (this.track.finishLine && !isNaN(this.track.finishLine.x) && !isNaN(this.track.finishLine.y)) {
+                    const finishX = (this.track.finishLine.x - this.track.finishLine.width/2) * scaleX;
+                    const finishY = (this.track.finishLine.y - this.track.finishLine.height/2) * scaleY;
+                    const finishWidth = Math.max(1, this.track.finishLine.width * scaleX);
+                    const finishHeight = Math.max(1, this.track.finishLine.height * scaleY);
+                    
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(finishX, finishY, finishWidth, finishHeight);
+                }
+                
+                // Desenhar checkpoints no mini-mapa
+                ctx.fillStyle = '#00ff00';
+                ctx.globalAlpha = 0.7;
+                for (let i = 0; i < this.track.checkpoints.length; i++) {
+                    const checkpoint = this.track.checkpoints[i];
+                    
+                    // Validar posição do checkpoint
+                    if (checkpoint && !isNaN(checkpoint.x) && !isNaN(checkpoint.y)) {
+                        if (i === this.currentCheckpoint) {
+                            ctx.fillStyle = '#ffff00'; // Checkpoint atual em amarelo
+                        } else if (i < this.currentCheckpoint) {
+                            ctx.fillStyle = '#00ff00'; // Checkpoints completados em verde
+                        } else {
+                            ctx.fillStyle = '#666666'; // Checkpoints futuros em cinza
+                        }
+                        
+                        // Desenhar checkpoint no mini-mapa
+                        const checkpointX = (checkpoint.x - checkpoint.width/2) * scaleX;
+                        const checkpointY = (checkpoint.y - checkpoint.height/2) * scaleY;
+                        const checkpointWidth = Math.max(1, checkpoint.width * scaleX);
+                        const checkpointHeight = Math.max(1, checkpoint.height * scaleY);
+                        
+                        ctx.fillRect(checkpointX, checkpointY, checkpointWidth, checkpointHeight);
+                    }
+                }
+                
+                // Desenhar posição do carro no mini-mapa (só se estiver em posição válida)
+                if (this.player && !isNaN(this.player.x) && !isNaN(this.player.y)) {
+                    const carX = this.player.x * scaleX;
+                    const carY = this.player.y * scaleY;
+                    
+                    // Verificar se a posição está dentro dos limites do mini-mapa
+                    if (carX >= 0 && carX <= canvas.width && carY >= 0 && carY <= canvas.height) {
+                        ctx.fillStyle = '#ff0000';
+                        ctx.globalAlpha = 1.0;
+                        ctx.beginPath();
+                        ctx.arc(carX, carY, 4, 0, 2 * Math.PI);
+                        ctx.fill();
+                        
+                        // Desenhar direção do carro (pequena linha)
+                        const directionLength = 8;
+                        const endX = carX + Math.cos(this.player.angle) * directionLength;
+                        const endY = carY + Math.sin(this.player.angle) * directionLength;
+                        
+                        ctx.strokeStyle = '#ffffff';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(carX, carY);
+                        ctx.lineTo(endX, endY);
+                        ctx.stroke();
+                    }
+                }
+                
+                // Resetar transparência
+                ctx.globalAlpha = 1.0;
             }
             
             updateGame() {
-                if (this.gameRunning) {
-                    this.gameTime += 1/60; // 60 FPS
+                if (this.gameRunning && !this.gamePaused) {
+                    // Calcular delta time real para o tempo do jogo
+                    const currentTime = performance.now();
+                    if (this.lastTime > 0) {
+                        const deltaTime = (currentTime - this.lastTime) / 1000; // Converter para segundos
+                        this.gameTime += deltaTime;
+                    }
+                    this.lastTime = currentTime;
+                    
                     this.updatePlayer();
+                    
+                    // Atualizar partículas do carro (usar deltaTime em milissegundos)
+                    const deltaTimeMs = this.lastTime > 0 ? (currentTime - this.lastTime) * 1000 : 0;
+                    this.player.updateParticles(deltaTimeMs);
+                    
                     this.updateUI();
+                    this.updateMiniMap();
+                } else {
+                    // Inicializar lastTime na primeira execução
+                    if (this.lastTime === 0) {
+                        this.lastTime = performance.now();
+                    }
                 }
+            }
+
+            updatePlayer() {
+                // Calcular delta time para esta atualização (em segundos)
+                const currentTime = performance.now();
+                const deltaTime = this.lastTime > 0 ? (currentTime - this.lastTime) / 1000 : 0;
                 
-                // Inicializar lastTime na primeira execução
-                if (this.lastTime === 0) {
-                    this.lastTime = performance.now();
+                // Atualizar carro
+                this.player.update(deltaTime, this.input, this.track);
+                
+                // Verificar checkpoints
+                if (this.track && this.track.checkCheckpoint(this.player, this.currentCheckpoint)) {
+                    this.currentCheckpoint++;
+                    this.checkpointProgress = (this.currentCheckpoint / this.track.checkpoints.length) * 100;
+                    
+                    // Verificar se completou a volta
+                    if (this.currentCheckpoint >= this.track.checkpoints.length) {
+                        this.lap++;
+                        this.currentCheckpoint = 0;
+                        this.checkpointProgress = 0;
+                        
+                        // Verificar se completou todas as voltas
+                        if (this.lap > this.maxLaps) {
+                            this.showGameOver();
+                            return;
+                        }
+                    }
                 }
             }
             
             updateUI() {
-                // Atualizar velocidade
+                // Atualizar velocidade com animação suave e efeitos visuais
                 const speedKmh = Math.round(this.player.speed * 15);
-                document.getElementById('speed').textContent = speedKmh;
+                const speedElement = document.getElementById('speed');
+                const speedContainer = speedElement.closest('.speedometer');
                 
-                // Atualizar tempo
-                const minutes = Math.floor(this.gameTime / 60);
-                const seconds = Math.floor(this.gameTime % 60);
-                const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                document.getElementById('time').textContent = timeString;
+                if (speedElement.textContent !== speedKmh.toString()) {
+                    // Animação de velocidade
+                    speedElement.style.transform = 'scale(1.2)';
+                    speedElement.style.color = speedKmh > 50 ? '#ff6b35' : '#00ff88';
+                    
+                    // Adicionar efeito de brilho baseado na velocidade
+                    if (speedKmh > 80) {
+                        speedContainer.classList.add('ui-glow');
+                        speedElement.classList.add('speed-glow');
+                    } else {
+                        speedContainer.classList.remove('ui-glow');
+                        speedElement.classList.remove('speed-glow');
+                    }
+                    
+                    setTimeout(() => {
+                        speedElement.textContent = speedKmh;
+                        speedElement.style.transform = 'scale(1)';
+                    }, 150);
+                }
                 
-                // Atualizar volta
-                document.getElementById('lap').textContent = this.lap;
+                // Atualizar tempo com formatação melhorada
+                const timeString = this.formatTime(this.gameTime);
+                const timeElement = document.getElementById('time');
+                if (timeElement.textContent !== timeString) {
+                    timeElement.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        timeElement.textContent = timeString;
+                        timeElement.style.transform = 'scale(1)';
+                    }, 100);
+                }
                 
-                // Atualizar checkpoint
+                // Atualizar volta com animação
+                const lapElement = document.getElementById('lap');
+                if (lapElement.textContent !== this.lap.toString()) {
+                    lapElement.style.transform = 'scale(1.2)';
+                    lapElement.style.color = '#ff8c42';
+                    setTimeout(() => {
+                        lapElement.style.transform = 'scale(1)';
+                        lapElement.style.color = '#ff6b35';
+                    }, 200);
+                }
+                
+                // Atualizar barra de progresso da volta com animação suave
+                const lapProgress = document.getElementById('lapProgress');
+                if (lapProgress && this.track) {
+                    const progress = (this.currentCheckpoint / this.track.checkpoints.length) * 100;
+                    lapProgress.style.width = `${progress}%`;
+                    
+                    // Adicionar efeito de brilho quando próximo de completar a volta
+                    if (progress > 80) {
+                        lapProgress.style.boxShadow = '0 0 10px #ff6b35';
+                    } else {
+                        lapProgress.style.boxShadow = 'none';
+                    }
+                }
+                
+                // Atualizar checkpoint com animação
                 if (this.track) {
-                    document.getElementById('checkpoint').textContent = `${this.currentCheckpoint + 1}/${this.track.checkpoints.length}`;
+                    const checkpointElement = document.getElementById('checkpoint');
+                    const newCheckpointText = `${this.currentCheckpoint + 1}/${this.track.checkpoints.length}`;
+                    
+                    if (checkpointElement.textContent !== newCheckpointText) {
+                        checkpointElement.style.transform = 'scale(1.1)';
+                        checkpointElement.style.color = '#ffff00';
+                        setTimeout(() => {
+                            checkpointElement.textContent = newCheckpointText;
+                            checkpointElement.style.transform = 'scale(1)';
+                            checkpointElement.style.color = '#ffd93d';
+                        }, 150);
+                    }
                 }
             }
             
@@ -908,8 +1751,15 @@
                     this.ctx.font = '12px Arial';
                     this.ctx.fillText('Debug: Pressione F1 para mostrar checkpoints', 20, 30);
                 }
+                
+                // Debug temporário - mostrar estado do carro
+                this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                this.ctx.font = '14px Arial';
+                this.ctx.fillText(`Velocidade: ${this.player.speed.toFixed(2)}`, 20, 60);
+                this.ctx.fillText(`Aceleração: ${this.player.acceleration.toFixed(2)}`, 20, 80);
+                this.ctx.fillText(`Input: F:${this.input.forward} B:${this.input.backward} L:${this.input.left} R:${this.input.right}`, 20, 100);
             }
-            
+
             gameLoop() {
                 this.updateGame();
                 this.render();
@@ -919,7 +1769,9 @@
         
         // Inicializar o jogo quando a página carregar
         window.addEventListener('load', () => {
-            new Game();
+            console.log('Página carregada, inicializando jogo...');
+            const game = new Game();
+            console.log('Jogo criado:', game);
         });
     </script>
 </body>
